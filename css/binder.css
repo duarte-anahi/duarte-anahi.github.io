@@ -83,15 +83,15 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 }
 .cover-front .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .cover-front .inside { transform: rotateY(180deg); background-position: 100% 0; }
-/* Nombre estampado en oro: recorte de la imagen de Gemini (img/nombre.png), no texto de código.
+/* Nombre estampado en plata: recorte de la imagen de Gemini (img/nombre.png), no texto de código.
    La sombra lo "hunde" en el cuero como un estampado a fuego real. */
 .cover-name { position: absolute; left: 4.6em; top: 5.2em; width: 23em; margin: 0; font-size: 1em; line-height: 0; }
 .cover-name img {
   width: 100%; height: auto; display: block;
   filter: drop-shadow(0 .07em .04em rgba(0,30,35,.6)) drop-shadow(0 -.03em 0 rgba(255,255,255,.12));
 }
-/* broche dorado, haciendo juego con el estampado */
-.leather-color .snap { background: radial-gradient(circle at 38% 35%, #fff6d8, #d9b36a 45%, #8a6424 80%, #3d2a0c); }
+/* broche plateado, haciendo juego con el estampado y las anillas */
+.leather-color .snap { background: radial-gradient(circle at 38% 35%, #ffffff, #c9ccce 45%, #6a6e71 80%, #2a2c2e); }
 /* La hebilla es el único lugar para abrir. Pistas sin texto: cursor, se corre al pasar, el broche brilla cada tanto. */
 .is-closed .strap { cursor: pointer; transition: left .45s cubic-bezier(.5,0,.2,1), transform .25s ease, filter .25s ease; }
 .is-closed .strap:hover { transform: translateX(.35em); filter: brightness(1.1); }
