@@ -61,20 +61,10 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 .cover-back { left: -.4em; top: -30em; width: 44.4em; height: 60em; z-index: 1; }
 .cover-back.leather { background-position: 0 0; }
 
-/* Correa con broche. Cerrada: cruza sobre la tapa. Abierta: sobresale a la derecha. */
-.strap {
-  left: 38.6em; top: -4.2em; width: 8em; height: 8.4em; z-index: 600;
-  border-radius: 1.2em 3.4em 3.4em 1.2em;
-  background-size: 400% 400%; background-position: 60% 50%;
-  transition: left .45s cubic-bezier(.5,0,.2,1), z-index 0s .45s;
-}
-.strap::before { inset: .6em; border-radius: .8em 2.8em 2.8em .8em; }
-.strap .snap {
-  position: absolute; right: 1.6em; top: 50%; width: 2.8em; height: 2.8em; margin-top: -1.4em; border-radius: 50%;
-  background: radial-gradient(circle at 38% 35%, #3a3a3a, #121212 60%, #050505);
-  box-shadow: .15em .25em .4em rgba(0,0,0,.8), inset 0 .08em .1em rgba(255,255,255,.15);
-}
-.is-open .strap, .is-opening .strap { left: 41.6em; z-index: 0; transition: left .45s cubic-bezier(.5,0,.2,1), z-index 0s; }
+/* Correa con hebilla metálica (img/hebilla.png, recorte de la imagen de Gemini).
+   Cerrada: cruza sobre la tapa y la punta asoma por el canto. Las posiciones al abrir/cerrar las mueve binder.js. */
+.strap { left: 28.6em; top: -3.1em; width: 16.36em; z-index: 600; line-height: 0; }
+.strap img { width: 100%; height: auto; display: block; filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)); }
 
 /* ===== Tapa frontal (gira) ===== */
 .cover-front {
@@ -90,28 +80,28 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
   width: 100%; height: auto; display: block;
   filter: drop-shadow(0 .07em .04em rgba(0,30,35,.6)) drop-shadow(0 -.03em 0 rgba(255,255,255,.12));
 }
-/* broche plateado, haciendo juego con el estampado y las anillas */
-.leather-color .snap { background: radial-gradient(circle at 38% 35%, #ffffff, #c9ccce 45%, #6a6e71 80%, #2a2c2e); }
-/* La hebilla es el único lugar para abrir. Pistas sin texto: cursor, se corre al pasar, el broche brilla cada tanto. */
-.is-closed .strap { cursor: pointer; transition: left .45s cubic-bezier(.5,0,.2,1), transform .25s ease, filter .25s ease; }
-.is-closed .strap:hover { transform: translateX(.35em); filter: brightness(1.1); }
+/* La hebilla es el único lugar para abrir. Pistas sin texto: cursor, se corre al pasar, el metal brilla cada tanto. */
+.is-closed .strap { cursor: pointer; transition: transform .25s ease, filter .25s ease; }
+.is-closed .strap:hover { transform: translateX(.35em); filter: brightness(1.12); }
 .strap:focus { outline: none; }
-.strap:focus-visible { box-shadow: 0 0 0 .2em rgba(255,255,255,.7); }
-.snap::after {
-  content: ""; position: absolute; inset: 0; border-radius: 50%; opacity: 0;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 55%);
+.strap:focus-visible img { outline: .15em solid rgba(255,255,255,.75); outline-offset: .2em; border-radius: .8em; }
+.is-closed .strap img { animation: glint 7s 3s infinite; }
+.is-closed .strap:hover img { animation: none; }
+@keyframes glint {
+  0%, 88%, 100% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1); }
+  93% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1.3); }
 }
-.is-closed .snap::after { animation: glint 7s 3s infinite; }
-.is-closed .strap:hover .snap::after { animation: none; opacity: .8; transition: opacity .2s; }
-@keyframes glint { 0%, 88%, 100% { opacity: 0; } 93% { opacity: .9; } }
 
 /* click en la tapa: se levanta apenas y la correa la frena */
 .nudge .cover-front { animation: nudge .7s cubic-bezier(.3,.7,.3,1); }
 .nudge .strap { animation: tug .7s cubic-bezier(.3,.7,.3,1); }
-.nudge .snap::after { animation: glint-now .7s; }
+.nudge .strap img { animation: glint-now .7s; }
 @keyframes nudge { 0%, 100% { transform: none; } 30% { transform: rotateY(-5deg); } 55% { transform: rotateY(-1.5deg); } 72% { transform: rotateY(-2.5deg); } }
 @keyframes tug { 0%, 100% { transform: none; } 30% { transform: translateX(-.35em); } 55% { transform: translateX(.1em); } }
-@keyframes glint-now { 0%, 100% { opacity: 0; } 35% { opacity: .95; } }
+@keyframes glint-now {
+  0%, 100% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1); }
+  35% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1.3); }
+}
 .cover-front .shade { border-radius: 1.1em; background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(0,0,0,.6)); }
 .cover-front:focus { outline: none; }
 

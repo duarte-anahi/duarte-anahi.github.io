@@ -170,13 +170,25 @@
     cover.style.setProperty("--lift", (Math.sin((a * Math.PI) / 180) * 0.7).toFixed(3));
     cast(a);
   }
+  /* Correa: cerrada (sobre la tapa), afuera (a la derecha, fuera de la tapa) y guardada (bajo la carpeta, asoma la punta).
+     Solo se cambia de "arriba" a "abajo" (z-index) cuando está afuera, así nunca atraviesa la tapa. */
+  const STRAP = { closed: 28.6, out: 44.3, tucked: 30.6 };
+  function strapTo(pos, z, ms) {
+    if (reduced) ms = 1;
+    strap.style.transition = `left ${ms}ms cubic-bezier(.5,0,.2,1), transform .25s ease, filter .25s ease`;
+    strap.style.left = pos + "em";
+    strap.style.zIndex = z;
+  }
+
   async function openBinder() {
     if (isOpen || busy) return;
     busy = true;
     binder.classList.remove("is-closed"); binder.classList.add("is-opening");
-    await wait(420); // se desabrocha la correa
+    strapTo(STRAP.out, 600, 480); // se desabrocha: la correa sale de la tapa
+    await wait(500);
     isOpen = true; focus = "right"; setCam();
     binder.classList.add("is-open");
+    strapTo(STRAP.tucked, 0, 1100); // y se guarda bajo la carpeta
     await tween(1350, (e) => paintCover(180 * e));
     clearCast();
     binder.classList.remove("is-opening");
@@ -190,8 +202,11 @@
     binder.classList.add("is-closing");
     await tween(1200, (e) => paintCover(180 * (1 - e)));
     clearCast();
-    isOpen = false; binder.classList.remove("is-open"); setCam();
-    await wait(700);
+    isOpen = false; binder.classList.remove("is-open"); binder.classList.add("is-closed"); setCam();
+    strapTo(STRAP.out, 0, 700); // la correa sale de abajo de la carpeta...
+    await wait(720);
+    strapTo(STRAP.closed, 600, 480); // ...y se abrocha sobre la tapa
+    await wait(500);
     binder.classList.remove("is-closing"); binder.classList.add("is-closed");
     busy = false; updateHud(); history.replaceState(null, "", location.pathname);
     strap.focus({ preventScroll: true });
