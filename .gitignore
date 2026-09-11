@@ -1,0 +1,5 @@
+# configuración local de Claude Code (rutas de esta compu)
+.claude/
+
+# original pesado de Gemini (la web usa img/cuero.jpg optimizado)
+img/cuero.png.jpeg

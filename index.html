@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anahí Duarte · Ingeniería en IA</title>
+  <meta name="description" content="Portfolio de Anahí Duarte, estudiante de Ingeniería en Inteligencia Artificial (UNaHur, Buenos Aires).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/binder.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<main class="scene">
+  <div class="binder is-closed" id="binder">
+    <div class="drop-shadow"></div>
+    <div class="cover-back leather"></div>
+    <div class="strap leather" id="strap" role="button" tabindex="0" aria-label="Abrir la carpeta"><span class="snap"></span></div>
+    <div class="mech"></div>
+    <div class="sheets" id="sheets"></div>
+    <div class="cast cast-r"></div>
+    <div class="cast cast-l"></div>
+
+    <div class="cover-front" id="coverFront">
+      <div class="face outside leather">
+        <h1 class="cover-name"><img src="img/nombre.png" alt="Anahí Duarte"></h1>
+        <div class="shade"></div>
+      </div>
+      <div class="face inside leather">
+        <div class="card">
+          <div class="name">Anahí Duarte</div>
+          <div class="role">Ingeniería en IA · UNaHur</div>
+          <!-- EDITAR: tus datos de contacto -->
+          <div class="contact">
+            <a href="mailto:tu@email.com">tu@email.com</a><br>
+            <a href="https://github.com/tu-usuario" target="_blank" rel="noopener">github.com/tu-usuario</a><br>
+            <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener">linkedin.com/in/tu-usuario</a>
+          </div>
+        </div>
+        <div class="pocket leather"></div>
+        <div class="shade"></div>
+      </div>
+    </div>
+
+    <div class="rings"></div>
+  </div>
+
+  <nav class="hud" aria-label="Navegación">
+    <button id="prev" type="button" aria-label="Página anterior">←</button>
+    <span class="count" aria-live="polite"></span>
+    <button id="next" type="button" aria-label="Página siguiente">→</button>
+    <button id="close" type="button">Cerrar</button>
+  </nav>
+</main>
+
+<!--
+  CONTENIDO. Cada <section class="page"> es una cara de hoja, en orden de lectura:
+  hoja 1 frente, hoja 1 dorso, hoja 2 frente, hoja 2 dorso...
+  Al abrir ves [dorso de la hoja anterior | frente de la hoja actual].
+  data-tab en una página de FRENTE crea la solapa de color de esa hoja.
+  class="page dark" = hoja negra.
+-->
+<div id="pages" hidden>
+
+  <!-- Hoja 1 · frente -->
+  <section class="page" data-tab="Inicio" data-color="#d9d4c7" data-name="Inicio">
+    <div class="pg">
+      <p class="kicker">Portfolio · 2026</p>
+      <h2 class="title xl">Anahí Duarte</h2>
+      <p class="lead">Estudiante de Ingeniería en Inteligencia Artificial en la Universidad Nacional de Hurlingham. Construyo modelos y las herramientas para usarlos.</p>
+      <div class="fig print" data-fig="net" style="margin-top:3.5em;width:62%;align-self:center"></div>
+      <div class="foot"><span>Buenos Aires, AR</span><span>01</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 1 · dorso -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker">Sobre mí</p>
+      <h2 class="title">Aprender cómo<br>aprenden las máquinas</h2>
+      <!-- EDITAR: tu texto -->
+      <p class="body" style="margin-top:1.8em">Me interesa la parte de la IA que toca el mundo real: datos desordenados, modelos que tienen que funcionar fuera del notebook y personas que los van a usar.</p>
+      <p class="body">Programo desde antes de la carrera. En la facultad sumé matemática, estadística y aprendizaje automático; en mis proyectos, todo lo que no se enseña en clase.</p>
+      <div class="timeline">
+        <div><b>Ingeniería en Inteligencia Artificial</b>UNaHur · Hurlingham<br><small>en curso</small></div>
+        <div><b>Proyectos propios</b>Visión, series temporales y modelos de lenguaje<br><small>ver solapas →</small></div>
+      </div>
+      <div class="foot"><span>Anahí Duarte</span><span>02</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 2 · frente -->
+  <section class="page" data-tab="Sobre mí" data-color="#c9b79c" data-name="Sobre mí">
+    <div class="pg">
+      <p class="kicker">Herramientas</p>
+      <h2 class="title">Stack</h2>
+      <!-- EDITAR: dejá solo lo que realmente usás -->
+      <div class="skill-group" style="margin-top:2.2em"><h3>Lenguajes</h3><div class="chips"><span>Python</span><span>SQL</span><span>JavaScript</span></div></div>
+      <div class="skill-group"><h3>Machine learning</h3><div class="chips"><span>PyTorch</span><span>scikit-learn</span><span>pandas</span><span>NumPy</span></div></div>
+      <div class="skill-group"><h3>LLMs</h3><div class="chips"><span>embeddings</span><span>RAG</span><span>APIs de modelos</span></div></div>
+      <div class="skill-group"><h3>Trabajo</h3><div class="chips"><span>Git</span><span>Jupyter</span><span>Linux</span></div></div>
+      <div class="foot"><span>Anahí Duarte</span><span>03</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 2 · dorso — EJEMPLO: reemplazar con tu proyecto real -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker">Proyecto 01 · Visión por computadora</p>
+      <h2 class="title">Clasificador<br>de residuos</h2>
+      <p class="lead">Una cámara, una foto y una respuesta: ¿a qué contenedor va?</p>
+      <dl class="specs">
+        <dt>Problema</dt><dd>Separar residuos en origen es confuso. Quería una ayuda inmediata desde el celular.</dd>
+        <dt>Enfoque</dt><dd>Transfer learning sobre una CNN preentrenada, dataset propio + público, aumento de datos.</dd>
+        <dt>Stack</dt><dd>Python · PyTorch · FastAPI</dd>
+        <dt>Resultado</dt><dd>Completar con tus métricas reales.</dd>
+      </dl>
+      <div class="foot"><a href="#">Ver repositorio ↗</a><span>04</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 3 · frente -->
+  <section class="page" data-tab="01" data-color="#a9c4b5" data-name="Proyecto 01">
+    <div class="pg">
+      <p class="kicker">Pipeline</p>
+      <div class="fig print" data-fig="pipeline"></div>
+      <p class="caption">Fig. 1 — De la foto a la predicción. El modelo corre detrás de una API; el cliente solo manda la imagen.</p>
+      <div class="rule"></div>
+      <p class="body">Lo más difícil no fue el modelo sino los datos: fotos con mala luz, objetos superpuestos y clases desbalanceadas.</p>
+      <div class="foot"><span>Proyecto 01</span><span>05</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 3 · dorso — EJEMPLO -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker">Proyecto 02 · Series temporales</p>
+      <h2 class="title">Predicción<br>de demanda</h2>
+      <p class="lead">Anticipar cuánto se va a vender la semana que viene, con datos reales y ruidosos.</p>
+      <dl class="specs">
+        <dt>Problema</dt><dd>Stock de más o de menos cuesta plata. Las planillas no alcanzaban.</dd>
+        <dt>Enfoque</dt><dd>Baseline estacional vs. gradient boosting con variables de calendario.</dd>
+        <dt>Stack</dt><dd>Python · pandas · scikit-learn</dd>
+        <dt>Resultado</dt><dd>Completar con tus métricas reales.</dd>
+      </dl>
+      <div class="foot"><a href="#">Ver repositorio ↗</a><span>06</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 4 · frente -->
+  <section class="page" data-tab="02" data-color="#e0b68e" data-name="Proyecto 02">
+    <div class="pg">
+      <p class="kicker">Resultados</p>
+      <div class="fig print" data-fig="chart"></div>
+      <p class="caption">Fig. 2 — Real vs. predicción en el set de validación (datos ilustrativos).</p>
+      <div class="rule"></div>
+      <p class="body">Un modelo simple bien validado le ganó a uno complejo mal validado. Esa fue la lección.</p>
+      <div class="foot"><span>Proyecto 02</span><span>07</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 4 · dorso — EJEMPLO (hoja negra) -->
+  <section class="page dark">
+    <div class="pg">
+      <p class="kicker">Proyecto 03 · Modelos de lenguaje</p>
+      <h2 class="title">Asistente<br>de apuntes</h2>
+      <p class="lead">Preguntarle a tus propios apuntes y que responda citando la fuente.</p>
+      <dl class="specs">
+        <dt>Problema</dt><dd>Cientos de PDFs de la carrera y ninguna forma rápida de encontrar nada.</dd>
+        <dt>Enfoque</dt><dd>RAG: fragmentación, embeddings, búsqueda vectorial y respuesta con citas.</dd>
+        <dt>Stack</dt><dd>Python · embeddings · base vectorial</dd>
+        <dt>Resultado</dt><dd>Completar con tus métricas reales.</dd>
+      </dl>
+      <div class="foot"><a href="#">Ver repositorio ↗</a><span>08</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 5 · frente (hoja negra) -->
+  <section class="page dark" data-tab="03" data-color="#8fb3c9" data-name="Proyecto 03">
+    <div class="pg">
+      <p class="kicker">Espacio de embeddings</p>
+      <div class="fig print" data-fig="mesh" style="margin-top:3em"></div>
+      <p class="caption">Fig. 3 — Fragmentos de apuntes proyectados en 2D. Temas cercanos, puntos cercanos.</p>
+      <div class="foot"><span>Proyecto 03</span><span>09</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 5 · dorso -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker">Contacto</p>
+      <h2 class="title xl">Hablemos</h2>
+      <p class="lead">Busco pasantías, proyectos de investigación y equipos donde aprender construyendo.</p>
+      <!-- EDITAR -->
+      <ul class="links">
+        <li><a href="mailto:tu@email.com">tu@email.com</a><span>Email</span></li>
+        <li><a href="https://github.com/tu-usuario" target="_blank" rel="noopener">github.com/tu-usuario</a><span>Código</span></li>
+        <li><a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener">linkedin.com/in/tu-usuario</a><span>Perfil</span></li>
+        <li><a href="#">CV (PDF)</a><span>Descargar</span></li>
+      </ul>
+      <div class="foot"><span>Anahí Duarte</span><span>10</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 6 · frente -->
+  <section class="page" data-tab="Contacto" data-color="#c7a3a8" data-name="Contacto">
+    <div class="pg">
+      <p class="kicker">Notas</p>
+      <div class="note-lines"><p class="handwrite" style="padding-top:.2em">Gracias por pasar las hojas.<br>Si llegaste hasta acá,<br>escribime :)<br><br>— Anah</p></div>
+      <div class="foot"><span>Anahí Duarte</span><span>11</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 6 · dorso -->
+  <section class="page">
+    <div class="pg">
+      <div class="foot"><span>Hecho a mano, con código</span><span>12</span></div>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/figures.js"></script>
+<script src="js/leather.js"></script>
+<script src="js/binder.js"></script>
+</body>
+</html>
