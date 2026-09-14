@@ -40,11 +40,16 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
   background-size: 100% 100%;
   border-radius: 1.1em;
 }
-.leather::before { /* costura perimetral */
-  content: ""; position: absolute; inset: .75em; border-radius: .7em; pointer-events: none;
-  border: .13em dashed rgba(255,255,255,.07);
-  box-shadow: 0 0 0 .08em rgba(0,0,0,.35);
+/* Costura perimetral: hilo REAL recortado de la foto de referencia (img/costura.png, 239×289, 9-slice).
+   Escala: 44.63 px de esa foto = 1em (misma escala que la textura del cuero).
+   Slice 96/69 px → 2.151em / 1.546em. El centro del hilo queda a 14 px (.314em) del borde de la pieza:
+   inset .69em → hilo a 1em del canto. "round" repite puntadas enteras, sin cortar ninguna. */
+.leather::before {
+  content: ""; position: absolute; inset: .69em; pointer-events: none;
+  border-style: solid; border-width: 2.151em 1.546em;
+  border-image: url("../img/costura.png") 96 69 / 2.151em 1.546em / 0 round;
 }
+.pocket.leather::before { inset: .49em; } /* bolsillo: hilo a .8em del canto */
 .leather::after { /* brillo del cuero + canto oscuro */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,0) 35%, rgba(0,0,0,.25));
@@ -107,7 +112,7 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 
 /* Bolsillo interior con tarjeta personal */
 .pocket {
-  position: absolute; left: 4.5em; right: 4em; bottom: 4.5em; height: 18em; border-radius: .6em 3em .6em .6em;
+  position: absolute; left: 4.5em; right: 4em; bottom: 4.5em; height: 18em; border-radius: .6em 1.2em .6em .6em;
   /* misma escala que la tapa (sin estirar ni ampliar = sin pixelar); solo corrida para que las escamas no calcen con las de atrás */
   background-size: 44.4em 60em; background-position: -9em -21em;
   box-shadow: 0 -.25em .5em rgba(0,0,0,.55);
