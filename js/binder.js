@@ -288,8 +288,9 @@
      - LEATHER.tint "negro": pasa a negro conservando relieve y brillo; "original": deja el color */
   const LEATHER = { tint: "original", crop: 0.72 };
   function fitPhoto(img) {
-    const W = 1160, H = Math.round(W * 60 / 44.4);
     const sw = img.naturalWidth * LEATHER.crop, sx = (img.naturalWidth - sw) / 2;
+    // ancho = resolución real del recorte (antes 1160 fijo: achicaba la foto y el cuero perdía nitidez)
+    const W = Math.round(Math.min(2048, sw)), H = Math.round(W * 60 / 44.4);
     const k = W / sw, ih = img.naturalHeight * k;
     const nh = img.naturalHeight;
     const c = document.createElement("canvas"); c.width = W; c.height = H;

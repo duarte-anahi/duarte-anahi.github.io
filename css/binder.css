@@ -108,7 +108,8 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 /* Bolsillo interior con tarjeta personal */
 .pocket {
   position: absolute; left: 4.5em; right: 4em; bottom: 4.5em; height: 18em; border-radius: .6em 3em .6em .6em;
-  background-size: 300% 300%; background-position: 30% 70%;
+  /* misma escala que la tapa (sin estirar ni ampliar = sin pixelar); solo corrida para que las escamas no calcen con las de atrás */
+  background-size: 44.4em 60em; background-position: -9em -21em;
   box-shadow: 0 -.25em .5em rgba(0,0,0,.55);
   z-index: 2;
 }
