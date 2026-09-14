@@ -6,12 +6,21 @@
   const btnPrev = $("#prev"), btnNext = $("#next"), btnClose = $("#close");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const RING_Y = [-21, -16, -11, 11, 16, 21]; // em desde el centro (6 anillas, 3 arriba y 3 abajo)
+  /* Mecanismo real (img/anillas.png, 226×1180 px). k = em por px de la imagen.
+     bands = filas [desde, hasta] de cada anilla en la imagen, medidas al recortarla. */
+  const MECH = { k: 0.0471, top: -27.62, bands: [[132, 194], [256, 318], [378, 440], [743, 805], [861, 923], [981, 1043]] };
+  const RING_Y = MECH.bands.map(([a, b]) => +(MECH.top + ((a + b) / 2) * MECH.k).toFixed(2)); // centro de cada anilla, em
   const PAGE_H = 56;
 
   /* ---------- Construcción ---------- */
   const rings = $(".rings");
-  RING_Y.forEach((y) => { const r = document.createElement("div"); r.className = "ring"; r.style.top = y + "em"; rings.appendChild(r); });
+  MECH.bands.forEach(([a, b]) => {
+    const r = document.createElement("div"); r.className = "ring";
+    r.style.top = MECH.top + a * MECH.k + "em";
+    r.style.height = (b - a) * MECH.k + "em";
+    r.style.backgroundPosition = `0 ${-a * MECH.k}em`;
+    rings.appendChild(r);
+  });
 
   const pages = [...document.querySelectorAll("#pages > .page")];
   const nSheets = Math.ceil(pages.length / 2);
@@ -112,11 +121,11 @@
   function cast(a) {
     const r = (a * Math.PI) / 180, lift = Math.sin(r);
     if (a <= 90) {
-      const edge = 40 * Math.cos(r);
+      const edge = 38.6 * Math.cos(r);
       castR.style.opacity = 1; castL.style.opacity = 0;
       castR.style.background = `linear-gradient(90deg, rgba(0,0,0,${0.3 * lift}) 0em, rgba(0,0,0,${0.2 * lift}) ${edge}em, rgba(0,0,0,0) ${edge + 1 + 9 * lift}em)`;
     } else {
-      const edge = 40 * -Math.cos(r);
+      const edge = 38.6 * -Math.cos(r);
       castL.style.opacity = 1; castR.style.opacity = 0;
       castL.style.background = `linear-gradient(270deg, rgba(0,0,0,${0.22 * lift}) 0em, rgba(0,0,0,${0.12 * lift}) ${edge}em, rgba(0,0,0,0) ${edge + 1 + 5 * lift}em)`;
     }
