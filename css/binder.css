@@ -125,17 +125,17 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
    Dos capas de la misma imagen: la barra entera va DEBAJO de las hojas (.mech) y cada anilla, como una
    franja recortada, va ENCIMA (.ring), así las hojas quedan "enhebradas". Medidas en binder.js (MECH). */
 .mech {
-  left: -5.25em; top: -27.62em; width: 10.65em; height: 55.58em; z-index: 8;
+  left: -4.80em; top: -27.62em; width: 9.74em; height: 55.58em; z-index: 8;
   background: url("../img/anillas.png") 0 0 / 100% 100% no-repeat;
   filter: drop-shadow(.35em .6em .45em rgba(0,0,0,.5));
 }
 .rings { left: 0; top: 0; z-index: 450; pointer-events: none; }
 .ring {
-  position: absolute; left: -5.25em; width: 10.65em;
-  background: url("../img/anillas.png") no-repeat; background-size: 10.65em 55.58em;
+  position: absolute; left: -4.80em; width: 9.74em;
+  background: url("../img/anillas.png") no-repeat; background-size: 9.74em 55.58em;
   filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.35));
   /* solo la parte de la anilla que pisa las hojas; sobre la barra se ve la capa de abajo (con su sombra real) */
-  --m: linear-gradient(90deg, #000 0, #000 2.15em, transparent 2.6em, transparent 7.4em, #000 8.2em, #000 100%);
+  --m: linear-gradient(90deg, #000 0, #000 1.97em, transparent 2.38em, transparent 6.77em, #000 7.50em, #000 100%);
   -webkit-mask-image: var(--m); mask-image: var(--m);
 }
 .is-closed .rings, .is-closing .rings, .is-closed .mech { visibility: hidden; }

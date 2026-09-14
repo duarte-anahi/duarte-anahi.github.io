@@ -8,7 +8,7 @@
 
   /* Mecanismo real (img/anillas.png, 226×1180 px). k = em por px de la imagen.
      bands = filas [desde, hasta] de cada anilla en la imagen, medidas al recortarla. */
-  const MECH = { k: 0.0471, top: -27.62, bands: [[132, 194], [256, 318], [378, 440], [743, 805], [861, 923], [981, 1043]] };
+  const MECH = { k: 0.04730, top: -27.62, bands: [[143, 180], [266, 300], [389, 420], [762, 790], [880, 911], [998, 1032]] };
   const RING_Y = MECH.bands.map(([a, b]) => +(MECH.top + ((a + b) / 2) * MECH.k).toFixed(2)); // centro de cada anilla, em
   const PAGE_H = 56;
 
