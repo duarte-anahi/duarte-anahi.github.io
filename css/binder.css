@@ -8,7 +8,7 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
-body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
 
 .scene { position: fixed; inset: 0; overflow: hidden; }
 /* mesa: negro con un charco de luz lateral, como en el video */
@@ -56,25 +56,33 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
   box-shadow: inset 0 0 0 .12em rgba(0,0,0,.6), inset .2em .2em .4em rgba(255,255,255,.05), inset -.3em -.3em .6em rgba(0,0,0,.5);
 }
 
-.drop-shadow {
-  left: -1em; top: -29em; width: 46em; height: 60em; border-radius: 2em;
+/* Sombra sobre la mesa: dos sombras fijas (cerrada y abierta) que se funden con opacidad.
+   Animar ancho/posición de una sombra tan difusa obligaba a redibujarla en cada cuadro. */
+.drop-shadow { left: -1em; top: -29em; width: 46em; height: 60em; }
+.drop-shadow::before, .drop-shadow::after {
+  content: ""; position: absolute; top: 0; bottom: 0; border-radius: 2em;
   box-shadow: 1.5em 2.2em 4em rgba(0,0,0,.85), .4em .6em 1em rgba(0,0,0,.6);
-  transition: left 1.15s cubic-bezier(.6,.05,.25,1), width 1.15s cubic-bezier(.6,.05,.25,1);
+  transition: opacity 1.15s cubic-bezier(.6,.05,.25,1);
 }
-.is-open .drop-shadow { left: -44em; width: 89em; }
+.drop-shadow::before { left: 0; width: 46em; }
+.drop-shadow::after { left: -43em; width: 89em; opacity: 0; }
+.is-open .drop-shadow::before { opacity: 0; }
+.is-open .drop-shadow::after { opacity: 1; }
 
 .cover-back { left: -.4em; top: -30em; width: 44.4em; height: 60em; z-index: 1; }
 .cover-back.leather { background-position: 0 0; }
 
 /* Correa con hebilla metálica (img/hebilla.png, recorte de la imagen de Gemini).
    Cerrada: cruza sobre la tapa y la punta asoma por el canto. Las posiciones al abrir/cerrar las mueve binder.js. */
-.strap { left: 28.6em; top: -3.1em; width: 16.36em; z-index: 600; line-height: 0; }
+/* Se mueve con transform (--sx lo define binder.js), no con left: así no recalcula el layout en cada cuadro. */
+.strap { left: 28.6em; top: -3.1em; width: 16.36em; z-index: 600; line-height: 0; transform: translateX(var(--sx, 0em)); }
 .strap img { width: 100%; height: auto; display: block; filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)); }
 
 /* ===== Tapa frontal (gira) ===== */
 .cover-front {
   left: -.4em; top: -30em; width: 44.4em; height: 60em; z-index: 500;
   transform-origin: .4em 50%; transform-style: preserve-3d;
+  will-change: transform; /* capa propia desde el inicio: el primer cuadro del giro no tiene que prepararla */
 }
 .cover-front .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .cover-front .inside { transform: rotateY(180deg); background-position: 100% 0; }
@@ -87,7 +95,7 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 }
 /* La hebilla es el único lugar para abrir. Pistas sin texto: cursor, se corre al pasar, el metal brilla cada tanto. */
 .is-closed .strap { cursor: pointer; transition: transform .25s ease, filter .25s ease; }
-.is-closed .strap:hover { transform: translateX(.35em); filter: brightness(1.12); }
+.is-closed .strap:hover { transform: translateX(calc(var(--sx, 0em) + .35em)); filter: brightness(1.12); }
 .strap:focus { outline: none; }
 .strap:focus-visible img { outline: .15em solid rgba(255,255,255,.75); outline-offset: .2em; border-radius: .8em; }
 .is-closed .strap img { animation: glint 7s 3s infinite; }
@@ -144,7 +152,14 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
   --m: linear-gradient(90deg, #000 0, #000 1.97em, transparent 2.38em, transparent 6.77em, #000 7.50em, #000 100%);
   -webkit-mask-image: var(--m); mask-image: var(--m);
 }
-.is-closed .rings, .is-closing .rings, .is-closed .mech { visibility: hidden; }
+/* Las anillas asoman a la izquierda de la tapa, así que solo se ven con la tapa levantada.
+   binder.js agrega .rings-on cuando la tapa pasa los 40° al abrir y la saca por debajo de 40° al cerrar;
+   el cambio es con un fundido para que no salten. */
+.rings, .mech { transition: opacity .35s ease; }
+.is-closing .rings, .is-closing .mech { transition-duration: .2s; } /* al cerrar, más rápido */
+.is-closed .rings, .is-closed .mech { visibility: hidden; opacity: 0; }
+.is-opening:not(.rings-on) .rings, .is-opening:not(.rings-on) .mech,
+.is-closing:not(.rings-on) .rings, .is-closing:not(.rings-on) .mech { opacity: 0; }
 .no-anim, .no-anim * { transition: none !important; }
 
 /* ===== Hojas ===== */
@@ -189,8 +204,8 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
   display: flex; align-items: center; justify-content: center;
 }
 .tab span {
-  writing-mode: vertical-rl; font: 600 .95em/1 "Inter", sans-serif; letter-spacing: .08em; text-transform: uppercase;
-  color: rgba(0,0,0,.62); padding-left: .3em;
+  writing-mode: vertical-rl; font: 600 .95em/1 "Inter Tight", sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--tab-ink, rgba(0,0,0,.62)); padding-left: .3em;
 }
 .back .tab { right: auto; left: -2.3em; border-radius: .7em 0 0 .7em; }
 .back .tab span { transform: rotate(180deg); padding: 0 .3em 0 0; }
@@ -200,14 +215,15 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 .sheet .face .clip { position: absolute; inset: 0; overflow: hidden; }
 
 /* sombra que proyecta la hoja que gira sobre las de abajo */
-.cast { top: -28em; height: 56em; width: 38.6em; z-index: 260; pointer-events: none; opacity: 0; }
-.cast-r { left: 3.1em; }
-.cast-l { left: -41.7em; }
+/* Degradé fijo: binder.js solo cambia opacidad y ancho (scaleX), que no obligan a redibujar. */
+.cast { top: -28em; height: 56em; width: 38.6em; z-index: 260; pointer-events: none; opacity: 0; will-change: transform, opacity; }
+.cast-r { left: 3.1em; transform-origin: 0 50%; background: linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.2) 72%, rgba(0,0,0,0)); }
+.cast-l { left: -41.7em; transform-origin: 100% 50%; background: linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,.12) 80%, rgba(0,0,0,0)); }
 
 /* ===== HUD ===== */
 .hud {
   position: fixed; left: 50%; bottom: 1.6vh; transform: translateX(-50%); z-index: 10;
-  display: flex; gap: .6rem; align-items: center; font: 500 12px/1 "Inter", sans-serif; letter-spacing: .12em;
+  display: flex; gap: .6rem; align-items: center; font: 500 12px/1 "Inter Tight", sans-serif; letter-spacing: .12em;
   color: rgba(255,255,255,.45); text-transform: uppercase; opacity: 0; transition: opacity .6s .6s;
 }
 .is-open ~ .hud, .hud.on { opacity: 1; }
@@ -217,9 +233,9 @@ body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); -webkit-f
 }
 .hud button:hover { background: rgba(255,255,255,.12); }
 .hud button:disabled { opacity: .3; cursor: default; }
-.hud .count { min-width: 5.5rem; text-align: center; white-space: nowrap; }
-@media (max-width: 520px) { .hud .count { min-width: 3.5rem; } .hud .count .nm { display: none; } }
+/* ancho fijo y números de igual ancho: el contador y las flechas no se mueven al pasar de página */
+.hud .count { width: 3.6rem; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
-  .binder, .strap, .drop-shadow { transition-duration: .01s !important; }
+  .binder, .strap, .drop-shadow::before, .drop-shadow::after { transition-duration: .01s !important; }
 }

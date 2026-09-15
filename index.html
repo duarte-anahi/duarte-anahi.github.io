@@ -7,9 +7,10 @@
   <meta name="description" content="Portfolio de Anahí Duarte: aplicaciones con modelos de lenguaje locales y deep learning.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/binder.css">
-  <link rel="stylesheet" href="css/pages.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
+  <link rel="stylesheet" href="css/binder.css?v=9">
+  <link rel="stylesheet" href="css/pages.css?v=9">
 </head>
 <body>
 <main class="scene">
@@ -56,7 +57,7 @@
   CONTENIDO. Cada <section class="page"> es una cara de hoja, en orden de lectura:
   hoja 1 frente, hoja 1 dorso, hoja 2 frente, hoja 2 dorso...
   Al abrir ves [dorso de la hoja anterior | frente de la hoja actual].
-  data-tab en una página de FRENTE crea la solapa de color de esa hoja.
+  data-tab en una página de FRENTE crea la solapa de esa hoja (data-color = fondo, data-ink = texto).
   class="page dark" = hoja negra.
   Todo el contenido sale de los repos de github.com/duarte-anahi.
 -->
@@ -65,33 +66,32 @@
   <!-- Hoja 1 · frente -->
   <section class="page" data-name="Inicio">
     <div class="pg">
-      <p class="kicker">Portfolio · 2026</p>
-      <h2 class="title xl">Anahí Duarte</h2>
+      <p class="kicker"><b>[00]</b>Portfolio 2026</p>
+      <h2 class="title xl">Anahí<br>Duarte,</h2>
       <p class="lead">Construyo aplicaciones de IA: desde entrenar redes neuronales hasta correr modelos de lenguaje de forma local.</p>
-      <div class="fig print" data-fig="net" style="margin-top:3.5em;width:62%;align-self:center"></div>
-      <div class="foot"><span>Buenos Aires, AR</span><span>01</span></div>
+      <div class="foot"><span>Buenos Aires</span><span>AR</span></div>
     </div>
   </section>
 
   <!-- Hoja 1 · dorso -->
   <section class="page">
     <div class="pg">
-      <p class="kicker">Sobre mí</p>
-      <h2 class="title">Aprender cómo<br>aprenden las máquinas</h2>
+      <p class="kicker"><b>[—]</b>Sobre mí</p>
+      <h2 class="title">Aprender cómo<br>aprenden las<br>máquinas</h2>
       <p class="body" style="margin-top:1.8em">Me interesan las herramientas de IA que acompañan a las personas en lugar de reemplazarlas, y los modelos que corren en la propia computadora, sin mandar datos a terceros.</p>
       <p class="body">Cuando un modelo falla, quiero entender por qué: mis proyectos de redes neuronales terminan en un diagnóstico, no solo en un número.</p>
       <div class="timeline">
-        <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA · EpifanIA<br><small>solapas 01 y 02 →</small></div>
-        <div><b>Deep learning</b>Clasificador de animales · Autoencoder<br><small>solapas 03 y 04 →</small></div>
+        <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA · EpifanIA<br><small>[01] [02] →</small></div>
+        <div><b>Deep learning</b>Clasificador de animales · Autoencoder<br><small>[03] [04] →</small></div>
       </div>
       <div class="foot"><span>Anahí Duarte</span><span>02</span></div>
     </div>
   </section>
 
   <!-- Hoja 2 · frente -->
-  <section class="page" data-tab="Sobre mí" data-color="#c9b79c" data-name="Sobre mí">
+  <section class="page" data-tab="Sobre mí" data-color="#efede7" data-ink="#111" data-name="Sobre mí">
     <div class="pg">
-      <p class="kicker">Herramientas</p>
+      <p class="kicker"><b>[—]</b>Herramientas</p>
       <h2 class="title">Stack</h2>
       <div class="skill-group" style="margin-top:2.2em"><h3>Lenguajes</h3><div class="chips"><span>Python</span><span>JavaScript</span></div></div>
       <div class="skill-group"><h3>Deep learning</h3><div class="chips"><span>TensorFlow</span><span>Keras</span><span>NumPy</span><span>Matplotlib</span></div></div>
@@ -105,7 +105,7 @@
   <!-- Hoja 2 · dorso — Proyecto 01 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker">Proyecto 01 · Modelos de lenguaje</p>
+      <p class="kicker"><b>[01]</b>Modelos de lenguaje</p>
       <h2 class="title">TutorIA</h2>
       <p class="lead">Un tutor socrático para trabajos académicos: guía con preguntas y no escribe por el estudiante.</p>
       <dl class="specs">
@@ -119,11 +119,11 @@
   </section>
 
   <!-- Hoja 3 · frente -->
-  <section class="page" data-tab="01" data-color="#a9c4b5" data-name="TutorIA">
+  <section class="page" data-tab="01" data-color="#d9d7d1" data-ink="#111" data-name="TutorIA">
     <div class="pg">
-      <p class="kicker">Interfaz</p>
+      <p class="kicker"><b>[01]</b>Interfaz</p>
       <div class="fig print"><img src="img/proyectos/tutoria.png" alt="Interfaz de TutorIA: editor con un borrador a la izquierda y chat con el tutor a la derecha"></div>
-      <p class="caption">Fig. 1 — El borrador va en el editor; la consigna y las dudas, en el chat. El tutor lee las dos cosas antes de responder.</p>
+      <p class="caption"><b>Fig. 1</b> — El borrador va en el editor; la consigna y las dudas, en el chat. El tutor lee las dos cosas antes de responder.</p>
       <div class="rule"></div>
       <p class="body">Los límites están escritos en el prompt: no redacta trabajos, no inventa citas y no avanza de etapa sin una respuesta concreta del estudiante.</p>
       <div class="foot"><span>TutorIA</span><span>05</span></div>
@@ -133,7 +133,7 @@
   <!-- Hoja 3 · dorso — Proyecto 02 (hoja negra) -->
   <section class="page dark">
     <div class="pg">
-      <p class="kicker">Proyecto 02 · Modelos locales</p>
+      <p class="kicker"><b>[02]</b>Modelos locales</p>
       <h2 class="title">EpifanIA</h2>
       <p class="lead">Un asistente de escritura que corre modelos de lenguaje en la propia computadora, sin conexión a internet.</p>
       <dl class="specs">
@@ -147,11 +147,11 @@
   </section>
 
   <!-- Hoja 4 · frente (hoja negra) -->
-  <section class="page dark" data-tab="02" data-color="#8fb3c9" data-name="EpifanIA">
+  <section class="page dark" data-tab="02" data-color="#b8c3f2" data-ink="#111" data-name="EpifanIA">
     <div class="pg">
-      <p class="kicker">Interfaz</p>
+      <p class="kicker"><b>[02]</b>Interfaz</p>
       <div class="fig print" style="margin-top:3em"><img src="img/proyectos/epifania.png" alt="Pantalla de inicio de EpifanIA con la elección de perfil: estudiante o docente"></div>
-      <p class="caption">Fig. 2 — Pantalla de inicio. Antes de entrar al editor se elige un perfil: estudiante o docente.</p>
+      <p class="caption"><b>Fig. 2</b> — Pantalla de inicio. Antes de entrar al editor se elige un perfil: estudiante o docente.</p>
       <div class="rule"></div>
       <p class="body">Pendiente: el backend todavía no usa el perfil elegido para adaptar las respuestas.</p>
       <div class="foot"><span>EpifanIA</span><span>07</span></div>
@@ -161,7 +161,7 @@
   <!-- Hoja 4 · dorso — Proyecto 03 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker">Proyecto 03 · Visión por computadora</p>
+      <p class="kicker"><b>[03]</b>Visión por computadora</p>
       <h2 class="title">Clasificador<br>de animales</h2>
       <p class="lead">Una red convolucional para 8 especies, y el diagnóstico de por qué no logra generalizar.</p>
       <dl class="specs">
@@ -175,11 +175,11 @@
   </section>
 
   <!-- Hoja 5 · frente -->
-  <section class="page" data-tab="03" data-color="#e0b68e" data-name="Clasificador de animales">
+  <section class="page" data-tab="03" data-color="#efede7" data-ink="#111" data-name="Clasificador de animales">
     <div class="pg">
-      <p class="kicker">Resultados</p>
+      <p class="kicker"><b>[03]</b>Resultados</p>
       <div class="fig print"><img src="img/proyectos/cnn-curvas.png" alt="Curvas de accuracy y loss de entrenamiento y validación para las versiones V1 y V2"></div>
-      <p class="caption">Fig. 3 — V1 vs V2. La pérdida de validación sube desde la época 6 mientras la de entrenamiento sigue bajando.</p>
+      <p class="caption"><b>Fig. 3</b> — V1 vs V2. La pérdida de validación sube desde la época 6 mientras la de entrenamiento sigue bajando.</p>
       <div class="rule"></div>
       <p class="body">Achicar el modelo un 75% no mejoró la generalización: el cuello de botella es el dataset, no la arquitectura.</p>
       <p class="body">En la prueba, Tom (de <i>Tom y Jerry</i>) salió clasificado como ave, con 70% de confianza.</p>
@@ -190,7 +190,7 @@
   <!-- Hoja 5 · dorso — Proyecto 04 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker">Proyecto 04 · Deep learning</p>
+      <p class="kicker"><b>[04]</b>Deep learning</p>
       <h2 class="title">Autoencoder<br>de caracteres</h2>
       <p class="lead">Comprimir letras de 7×5 píxeles en solo dos números, y volver a reconstruirlas.</p>
       <dl class="specs">
@@ -204,11 +204,11 @@
   </section>
 
   <!-- Hoja 6 · frente -->
-  <section class="page" data-tab="04" data-color="#b9b3d6" data-name="Autoencoder">
+  <section class="page" data-tab="04" data-color="#d9d7d1" data-ink="#111" data-name="Autoencoder">
     <div class="pg">
-      <p class="kicker">Espacio latente</p>
+      <p class="kicker"><b>[04]</b>Espacio latente</p>
       <div class="fig print" style="width:74%;align-self:center"><img src="img/proyectos/autoencoder-latente.png" alt="Gráfico del espacio latente 2D con cada carácter ubicado según sus coordenadas"></div>
-      <p class="caption">Fig. 4 — Cada carácter ubicado según sus dos valores latentes. Las formas parecidas quedan cerca.</p>
+      <p class="caption"><b>Fig. 4</b> — Cada carácter ubicado según sus dos valores latentes. Las formas parecidas quedan cerca.</p>
       <div class="rule"></div>
       <p class="body">Con 5% de ruido reconstruye bien; con 30% devuelve otro carácter. Con solo 32 muestras, la red memoriza en lugar de generalizar.</p>
       <div class="foot"><span>Autoencoder</span><span>11</span></div>
@@ -218,8 +218,8 @@
   <!-- Hoja 6 · dorso -->
   <section class="page">
     <div class="pg">
-      <p class="kicker">Contacto</p>
-      <h2 class="title xl">Hablemos</h2>
+      <p class="kicker"><b>[—]</b>Contacto</p>
+      <h2 class="title xl">Hablemos.</h2>
       <p class="lead">El código de todos estos proyectos está en GitHub.</p>
       <ul class="links">
         <li><a href="mailto:anahxduart@gmail.com">anahxduart@gmail.com</a><span>Email</span></li>
@@ -230,10 +230,14 @@
   </section>
 
   <!-- Hoja 7 · frente -->
-  <section class="page" data-tab="Contacto" data-color="#c7a3a8" data-name="Contacto">
+  <section class="page" data-tab="Contacto" data-color="#b8c3f2" data-ink="#111" data-name="Contacto">
     <div class="pg">
-      <p class="kicker">Notas</p>
-      <div class="note-lines"><p class="handwrite" style="padding-top:.2em">Gracias por pasar las hojas.<br>Si llegaste hasta acá,<br>escribime :)<br><br>— Anah</p></div>
+      <p class="kicker"><b>[—]</b>Notas</p>
+      <div class="label-card">
+        <div class="row"><span>Para</span><p class="handwrite">quien pasó las hojas</p></div>
+        <div class="row"><span>Nota</span><p class="handwrite">Si llegaste hasta acá,<br>escribime :)</p></div>
+        <div class="row"><span>De</span><p class="handwrite">Anah</p></div>
+      </div>
       <div class="foot"><span>Anahí Duarte</span><span>13</span></div>
     </div>
   </section>
@@ -241,8 +245,8 @@
 
 </div>
 
-<script src="js/figures.js"></script>
-<script src="js/leather.js"></script>
-<script src="js/binder.js"></script>
+<script src="js/figures.js?v=9"></script>
+<script src="js/leather.js?v=9"></script>
+<script src="js/binder.js?v=9"></script>
 </body>
 </html>

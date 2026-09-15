@@ -39,10 +39,11 @@
     return face;
   }
 
-  function makeTab(label, color, k, target, hidden) {
+  function makeTab(label, color, ink, k, target, hidden) {
     const b = document.createElement("button");
     b.className = "tab"; b.type = "button";
     b.style.top = 3 + k * 8.4 + "em"; b.style.setProperty("--tab", color);
+    if (ink) b.style.setProperty("--tab-ink", ink);
     b.innerHTML = "<span></span>"; b.firstChild.textContent = label;
     b.setAttribute("aria-label", "Ir a " + label);
     if (hidden) { b.tabIndex = -1; b.setAttribute("aria-hidden", "true"); }
@@ -50,7 +51,6 @@
     return b;
   }
 
-  const spreadNames = [];
   for (let i = 0; i < nSheets; i++) {
     const fp = pages[i * 2], bp = pages[i * 2 + 1];
     const el = document.createElement("div"); el.className = "sheet";
@@ -59,19 +59,19 @@
     el.style.height = 56 - i * 0.04 + "em";
     const front = makeFace("front", fp, i), back = makeFace("back", bp, i);
     if (fp.dataset.tab) {
-      front.appendChild(makeTab(fp.dataset.tab, fp.dataset.color || "#c8c2b4", tabIndex, i, false));
-      back.appendChild(makeTab(fp.dataset.tab, fp.dataset.color || "#c8c2b4", tabIndex, i, true));
+      front.appendChild(makeTab(fp.dataset.tab, fp.dataset.color || "#c8c2b4", fp.dataset.ink, tabIndex, i, false));
+      back.appendChild(makeTab(fp.dataset.tab, fp.dataset.color || "#c8c2b4", fp.dataset.ink, tabIndex, i, true));
       tabIndex++;
     }
-    spreadNames[i] = fp.dataset.name || fp.dataset.tab || "";
     el.append(front, back);
     sheetsEl.appendChild(el);
     sheets.push({ el, ang: 0, token: 0 });
   }
   // Si la última hoja no tiene dorso, no se la da vuelta: la doble página final es la anterior.
   const lastSpread = pages.length % 2 ? nSheets - 1 : nSheets;
-  spreadNames[nSheets] = "Fin";
   sheets.forEach((s, i) => rest(i));
+  // Decodifica las imágenes de las hojas de antemano: si no, se decodifican justo al abrir la tapa.
+  sheetsEl.querySelectorAll("img").forEach((im) => { if (im.decode) im.decode().catch(() => {}); });
 
   /* ---------- Estado ---------- */
   let isOpen = false, busy = false, spread = 0, focus = "right", zSeq = 0;
@@ -120,16 +120,17 @@
     paint(i, s.ang < 90 ? 0 : 180);
     s.el.style.zIndex = s.ang < 90 ? 200 - i : 10 + i;
   }
+  // Sombra que proyecta lo que gira: el degradé es fijo (CSS); acá solo cambian opacidad y ancho.
   function cast(a) {
     const r = (a * Math.PI) / 180, lift = Math.sin(r);
     if (a <= 90) {
-      const edge = 38.6 * Math.cos(r);
-      castR.style.opacity = 1; castL.style.opacity = 0;
-      castR.style.background = `linear-gradient(90deg, rgba(0,0,0,${0.3 * lift}) 0em, rgba(0,0,0,${0.2 * lift}) ${edge}em, rgba(0,0,0,0) ${edge + 1 + 9 * lift}em)`;
+      const reach = 38.6 * Math.cos(r) + 1 + 9 * lift;
+      castR.style.opacity = lift.toFixed(3); castL.style.opacity = 0;
+      castR.style.transform = `scaleX(${(reach / 38.6).toFixed(4)})`;
     } else {
-      const edge = 38.6 * -Math.cos(r);
-      castL.style.opacity = 1; castR.style.opacity = 0;
-      castL.style.background = `linear-gradient(270deg, rgba(0,0,0,${0.22 * lift}) 0em, rgba(0,0,0,${0.12 * lift}) ${edge}em, rgba(0,0,0,0) ${edge + 1 + 5 * lift}em)`;
+      const reach = 38.6 * -Math.cos(r) + 1 + 5 * lift;
+      castL.style.opacity = lift.toFixed(3); castR.style.opacity = 0;
+      castL.style.transform = `scaleX(${(reach / 38.6).toFixed(4)})`;
     }
   }
   const clearCast = () => { castR.style.opacity = 0; castL.style.opacity = 0; };
@@ -184,11 +185,15 @@
   /* Correa: cerrada (sobre la tapa), afuera (a la derecha, fuera de la tapa) y guardada (bajo la carpeta, asoma la punta).
      Solo se cambia de "arriba" a "abajo" (z-index) cuando está afuera, así nunca atraviesa la tapa. */
   const STRAP = { closed: 28.6, out: 44.3, tucked: 30.6 };
+  let strapToken = 0;
   function strapTo(pos, z, ms) {
     if (reduced) ms = 1;
-    strap.style.transition = `left ${ms}ms cubic-bezier(.5,0,.2,1), transform .25s ease, filter .25s ease`;
-    strap.style.left = pos + "em";
+    const token = ++strapToken;
+    strap.style.transition = `transform ${ms}ms cubic-bezier(.5,0,.2,1), filter .25s ease`;
+    strap.style.setProperty("--sx", pos - STRAP.closed + "em");
     strap.style.zIndex = z;
+    // al terminar, vuelve la transición corta del hover
+    setTimeout(() => { if (token === strapToken) strap.style.transition = ""; }, ms + 50);
   }
 
   async function openBinder() {
@@ -200,7 +205,11 @@
     isOpen = true; focus = "right"; setCam();
     binder.classList.add("is-open");
     strapTo(STRAP.tucked, 0, 1100); // y se guarda bajo la carpeta
-    await tween(1350, (e) => paintCover(180 * e));
+    await tween(1350, (e) => {
+      const a = 180 * e;
+      paintCover(a);
+      if (a > 40) binder.classList.add("rings-on"); // las anillas aparecen cuando la tapa ya se levantó
+    });
     clearCast();
     binder.classList.remove("is-opening");
     busy = false; updateHud();
@@ -211,9 +220,13 @@
     busy = true;
     if (spread > 0) { goTo(0); await wait(900 + spread * 110); }
     binder.classList.add("is-closing");
-    await tween(1200, (e) => paintCover(180 * (1 - e)));
+    await tween(1200, (e) => {
+      const a = 180 * (1 - e);
+      paintCover(a);
+      if (a < 100) binder.classList.remove("rings-on"); // antes que al abrir: el fundido tiene que terminar antes de que la tapa se vea plana
+    });
     clearCast();
-    isOpen = false; binder.classList.remove("is-open"); binder.classList.add("is-closed"); setCam();
+    isOpen = false; binder.classList.remove("is-open", "rings-on"); binder.classList.add("is-closed"); setCam();
     strapTo(STRAP.out, 0, 700); // la correa sale de abajo de la carpeta...
     await wait(720);
     strapTo(STRAP.closed, 600, 480); // ...y se abrocha sobre la tapa
@@ -227,7 +240,6 @@
   function updateHud() {
     hud.classList.toggle("on", isOpen);
     countEl.textContent = `${spread + 1} / ${lastSpread + 1}`;
-    if (spreadNames[spread]) { const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = " · " + spreadNames[spread]; countEl.appendChild(nm); }
     btnNext.disabled = spread === lastSpread && !(mobile() && focus === "left");
   }
   btnPrev.onclick = prev; btnNext.onclick = next; btnClose.onclick = closeBinder;
@@ -275,13 +287,22 @@
     const u = 26; // resolución de la textura: px por unidad
     if (window.makeLeather) makeLeather({ width: 44.4 * u, height: 60 * u, seed: 11 }).then((url) => setLeather(url, false));
   };
-  (function tryPhoto(list) {
+  function tryPhoto(list) {
     if (!list.length) return procedural();
     const img = new Image();
     img.onload = () => { setLeather(fitPhoto(img), true); document.body.classList.toggle("leather-color", LEATHER.tint !== "negro"); };
     img.onerror = () => tryPhoto(list.slice(1));
     img.src = list[0];
-  })(["img/cuero.jpg", "img/cuero.jpeg", "img/cuero.png", "img/cuero.webp"]);
+  }
+  // img/cuero-tapa.jpg = la foto ya adaptada por fitPhoto(), guardada como archivo. Así el navegador no la
+  // procesa en cada carga (eso trababa la apertura). Si cambiás img/cuero.jpg, borrá cuero-tapa.jpg y regenerala.
+  const prefit = new Image();
+  prefit.onload = () => {
+    const apply = () => { setLeather(prefit.src, true); document.body.classList.toggle("leather-color", LEATHER.tint !== "negro"); };
+    prefit.decode ? prefit.decode().then(apply, apply) : apply();
+  };
+  prefit.onerror = () => tryPhoto(["img/cuero.jpg", "img/cuero.jpeg", "img/cuero.png", "img/cuero.webp"]);
+  prefit.src = "img/cuero-tapa.jpg";
 
   /* Adapta cualquier foto de cuero a la tapa (vertical, 44.4 × 60):
      - recorta el centro al ancho LEATHER.crop (panza + algo de costados)
