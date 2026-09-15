@@ -29,7 +29,8 @@
 .print { mix-blend-mode: multiply; }
 .dark .print { mix-blend-mode: screen; }
 .fig { margin-top: 2.2em; }
-.fig svg { display: block; width: 100%; height: auto; }
+.fig svg, .fig img { display: block; width: 100%; height: auto; }
+.specs code { font: .9em "IBM Plex Mono", ui-monospace, monospace; }
 .caption { font: .85em/1.4 "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); margin-top: .8em; }
 
 /* listas técnicas */
