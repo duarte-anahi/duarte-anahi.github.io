@@ -68,6 +68,8 @@
     sheetsEl.appendChild(el);
     sheets.push({ el, ang: 0, token: 0 });
   }
+  // Si la última hoja no tiene dorso, no se la da vuelta: la doble página final es la anterior.
+  const lastSpread = pages.length % 2 ? nSheets - 1 : nSheets;
   spreadNames[nSheets] = "Fin";
   sheets.forEach((s, i) => rest(i));
 
@@ -144,7 +146,7 @@
 
   function goTo(target) {
     if (!isOpen) { openBinder().then(() => goTo(target)); return; }
-    target = Math.max(0, Math.min(nSheets, target));
+    target = Math.max(0, Math.min(lastSpread, target));
     if (target === spread) return;
     const jumps = Math.abs(target - spread), dur = jumps > 1 ? 750 : 950, gap = jumps > 1 ? 110 : 0;
     const list = [];
@@ -153,7 +155,7 @@
     list.forEach(([i, to], k) => setTimeout(() => flip(i, to, dur), reduced ? 0 : k * gap));
     focus = target > spread ? "left" : "right";
     if (target === 0) focus = "right";
-    if (target === nSheets) focus = "left";
+    if (target === nSheets) focus = "left"; // solo ocurre cuando la última hoja tiene dorso
     spread = target;
     setCam(); updateHud();
     history.replaceState(null, "", "#" + spread);
@@ -224,9 +226,9 @@
   /* ---------- HUD e interacción ---------- */
   function updateHud() {
     hud.classList.toggle("on", isOpen);
-    countEl.textContent = `${spread + 1} / ${nSheets + 1}`;
+    countEl.textContent = `${spread + 1} / ${lastSpread + 1}`;
     if (spreadNames[spread]) { const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = " · " + spreadNames[spread]; countEl.appendChild(nm); }
-    btnNext.disabled = spread === nSheets && !(mobile() && focus === "left");
+    btnNext.disabled = spread === lastSpread && !(mobile() && focus === "left");
   }
   btnPrev.onclick = prev; btnNext.onclick = next; btnClose.onclick = closeBinder;
   // Se abre solo desde la hebilla. Click en la tapa = la tapa se levanta un poco y la correa la frena (pista sin texto).
