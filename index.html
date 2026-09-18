@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=50">
-  <link rel="stylesheet" href="css/pages.css?v=50">
+  <link rel="stylesheet" href="css/binder.css?v=52">
+  <link rel="stylesheet" href="css/pages.css?v=52">
 </head>
 <body>
 <main class="scene">
@@ -83,7 +83,7 @@
       <p class="body">Cuando el sistema se equivoca, no me conformo con mirar la métrica de error. Me interesa investigar a fondo los resultados para explicar exactamente qué pasó y por qué.</p>
       <div class="timeline">
         <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA</div>
-        <div><b>Deep learning</b>Modelo convolucional · Autoencoder</div>
+        <div><b>Deep learning</b>CNN · Autoencoder</div>
         <div><b>Recuperación aumentada (RAG)</b>El Contraste</div>
         <div><b>Machine learning clásico</b>FIND-S · naïve Bayes</div>
       </div>
@@ -136,21 +136,21 @@
   <!-- Hoja 4 · dorso — Proyecto 03 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker"><b>[02]</b>Visión por computadora</p>
-      <h2 class="title">Modelo<br>convolucional</h2>
-      <p class="lead">Diseño, entrenamiento y diagnóstico de una red convolucional para clasificar imágenes en 8 clases.</p>
+      <p class="kicker"><b>[02]</b>Convolutional Neural Network</p>
+      <h2 class="title">CNN</h2>
+      <p class="lead">Diseño, entrenamiento y diagnóstico de una red neuronal convolucional para clasificar imágenes en 8 clases.</p>
       <dl class="specs">
         <dt>Arquitectura</dt><dd>Cuatro bloques Conv2D + MaxPooling con filtros crecientes (32 → 64 → 128 → 128) y un clasificador denso de 8 salidas: ~2,6M de parámetros.</dd>
         <dt>Entrenamiento</dt><dd>1.567 imágenes a 200×200, división 80/20, optimizador Adam y 15 épocas.</dd>
         <dt>Experimento</dt><dd>Una segunda versión con 32 filtros fijos en todos los bloques (~619K parámetros, 75% menos) para contrastar capacidad y generalización.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/modelo-convolucional" target="_blank" rel="noopener">Ver repositorio ↗</a><span>06</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/convolutional-neural-network" target="_blank" rel="noopener">Ver repositorio ↗</a><span>06</span></div>
     </div>
   </section>
 
   <!-- Hoja 5 · frente -->
-  <section class="page" data-tab="Deep learning" data-color="#efede7" data-ink="#111" data-name="Modelo convolucional">
+  <section class="page" data-tab="Deep learning" data-color="#efede7" data-ink="#111" data-name="CNN">
     <div class="pg">
       <p class="kicker"><b>[02]</b>Diagnóstico</p>
       <div class="fig print"><img src="img/proyectos/cnn-curvas.png" alt="Curvas de accuracy y loss de entrenamiento y validación para las dos versiones del modelo"></div>
@@ -158,7 +158,7 @@
       <div class="rule"></div>
       <p class="body">Las dos versiones llegan al 99% en entrenamiento y se estancan cerca del 59% en validación: el modelo memoriza. Recortar el 75% de los parámetros no cambió nada, así que el límite está en los datos.</p>
       <p class="body">Lo aprendido: si la pérdida de validación sube mientras la de entrenamiento baja, hay que dejar de tocar capas y mirar los datos.</p>
-      <div class="foot"><span>Modelo convolucional</span><span>07</span></div>
+      <div class="foot"><span>CNN</span><span>07</span></div>
     </div>
   </section>
 
@@ -276,8 +276,8 @@
 
 </div>
 
-<script src="js/figures.js?v=50"></script>
-<script src="js/leather.js?v=50"></script>
-<script src="js/binder.js?v=50"></script>
+<script src="js/figures.js?v=52"></script>
+<script src="js/leather.js?v=52"></script>
+<script src="js/binder.js?v=52"></script>
 </body>
 </html>
