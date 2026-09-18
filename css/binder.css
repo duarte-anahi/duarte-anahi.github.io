@@ -28,7 +28,8 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .binder {
   position: absolute; left: 50%; top: 50%; width: 0; height: 0;
   transform: translate(var(--camx, 0em), 0);
-  transition: transform 1.15s cubic-bezier(.6,.05,.25,1);
+  /* font-size = escala del mundo: al abrir/cerrar la cámara se acerca o se aleja con la misma curva */
+  transition: transform 1.15s cubic-bezier(.6,.05,.25,1), font-size 1.15s cubic-bezier(.6,.05,.25,1);
   perspective: 260em;
 }
 .binder > * { position: absolute; }
@@ -220,11 +221,51 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .cast-r { left: 3.1em; transform-origin: 0 50%; background: linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.2) 72%, rgba(0,0,0,0)); }
 .cast-l { left: -41.7em; transform-origin: 100% 50%; background: linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,.12) 80%, rgba(0,0,0,0)); }
 
+/* ===== Hoja suelta: al tocar una hoja, sale de la carpeta y se agranda para leerla ===== */
+.lector {
+  position: fixed; inset: 0; z-index: 800; display: grid; place-items: center;
+  background: rgba(4,4,4,.78); opacity: 0; transition: opacity .35s ease;
+}
+.lector.on { opacity: 1; }
+.lector .hoja {
+  /* la hoja suelta se agranda todo lo que dé el ancho; si el texto no entra, se desplaza */
+  position: relative; width: 38.6em; min-height: 56em; max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
+  background-color: var(--paper);
+  background-image: var(--paper-noise), linear-gradient(115deg, #fbfaf6 0%, #f0eee7 55%, #e6e3db 100%);
+  box-shadow: 0 1.5em 4em rgba(0,0,0,.75), 0 .2em .6em rgba(0,0,0,.5);
+  transform-origin: 0 0; will-change: transform;
+}
+.lector .hoja.dark {
+  background-color: #0e0f10; color: #e9e9e6;
+  background-image: var(--paper-noise), linear-gradient(115deg, #17191b, #0c0d0e);
+}
+/* la hoja suelta no tiene anillas: el texto usa todo el margen y fluye (no va posicionado) */
+.lector .pg { position: static; min-height: 56em; padding: 4.6em 4.4em 3.4em 4.4em; }
+.lector .hoja::-webkit-scrollbar { width: .5em; }
+.lector .hoja::-webkit-scrollbar-thumb { background: rgba(0,0,0,.25); border-radius: 1em; }
+.lector-barra {
+  /* arriba a la derecha, fuera de la hoja: si estuviera abajo taparía el texto al desplazarse */
+  position: fixed; top: 2.2vh; right: 2vw; z-index: 810;
+  display: flex; gap: .6rem; align-items: center;
+  font: 500 12px/1 "Inter Tight", sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+  padding: .5rem .7rem; border-radius: 999px; background: rgba(10,10,10,.72); backdrop-filter: blur(6px);
+}
+.lector-barra button {
+  background: rgba(255,255,255,.06); color: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px; padding: .55rem .9rem; font: inherit; letter-spacing: inherit; cursor: pointer;
+}
+.lector-barra button:hover { background: rgba(255,255,255,.14); }
+.lector-barra button:disabled { opacity: .3; cursor: default; }
+
 /* ===== HUD ===== */
 .hud {
-  position: fixed; left: 50%; bottom: 1.6vh; transform: translateX(-50%); z-index: 10;
+  position: fixed; left: 50%; bottom: 1.6vh; transform: translateX(-50%); z-index: 50;
   display: flex; gap: .6rem; align-items: center; font: 500 12px/1 "Inter Tight", sans-serif; letter-spacing: .12em;
-  color: rgba(255,255,255,.45); text-transform: uppercase; opacity: 0; transition: opacity .6s .6s;
+  color: rgba(255,255,255,.75); text-transform: uppercase; opacity: 0; transition: opacity .6s .6s;
+  /* con la carpeta abierta la hoja llega hasta abajo: la barra necesita su propio fondo para leerse */
+  padding: .5rem .7rem; border-radius: 999px;
+  background: rgba(10,10,10,.72); backdrop-filter: blur(6px); box-shadow: 0 .2rem 1rem rgba(0,0,0,.5);
 }
 .is-open ~ .hud, .hud.on { opacity: 1; }
 .hud button {

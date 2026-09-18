@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=9">
-  <link rel="stylesheet" href="css/pages.css?v=9">
+  <link rel="stylesheet" href="css/binder.css?v=17">
+  <link rel="stylesheet" href="css/pages.css?v=17">
 </head>
 <body>
 <main class="scene">
@@ -83,6 +83,7 @@
       <div class="timeline">
         <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA · EpifanIA<br><small>[01] [02] →</small></div>
         <div><b>Deep learning</b>Clasificador de animales · Autoencoder<br><small>[03] [04] →</small></div>
+        <div><b>Recuperación aumentada (RAG)</b>El Contraste<br><small>[05] →</small></div>
       </div>
       <div class="foot"><span>Anahí Duarte</span><span>02</span></div>
     </div>
@@ -215,7 +216,35 @@
     </div>
   </section>
 
-  <!-- Hoja 6 · dorso -->
+  <!-- Hoja 6 · dorso — Proyecto 05 -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker"><b>[05]</b>RAG y verificación</p>
+      <h2 class="title">EL<br>CONTRASTE</h2>
+      <p class="lead">Un auditor que evalúa una noticia contra un corpus de estándares periodísticos y muestra cuáles usó.</p>
+      <dl class="specs">
+        <dt>Qué hace</dt><dd>Recupera del corpus los estándares que aplican a la pieza, se los pasa a un modelo de lenguaje y devuelve un dictamen con nivel de credibilidad: alta, media o baja.</dd>
+        <dt>Corpus</dt><dd>49 estándares tomados de documentos públicos: IFCN, la tipología de Wardle, ACNUR y la Defensoría del Público.</dd>
+        <dt>Recuperación</dt><dd>Híbrida: los 15 estándares generales entran siempre; los 34 temáticos, solo si superan un umbral de relevancia.</dd>
+        <dt>Stack</dt><dd>Python · FastAPI · LangChain · Chroma · HTML, CSS y JS</dd>
+      </dl>
+      <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 7 · frente -->
+  <section class="page" data-tab="05" data-color="#dfd6c6" data-ink="#111" data-name="El Contraste">
+    <div class="pg">
+      <p class="kicker"><b>[05]</b>Interfaz</p>
+      <div class="fig print"><img src="img/proyectos/contraste.png" alt="Interfaz de EL CONTRASTE con forma de diario: cabecera, campo para pegar la noticia y ficha técnica"></div>
+      <p class="caption"><b>Fig. 5</b> — La interfaz tiene forma de diario: se pega la noticia, se elige el modelo y el dictamen sale como nota de tapa.</p>
+      <div class="rule"></div>
+      <p class="body">Los embeddings corren en la propia máquina y las claves quedan en el backend. Cambiar de proveedor de modelo es una línea de configuración.</p>
+      <div class="foot"><span>El Contraste</span><span>13</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 7 · dorso -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[—]</b>Contacto</p>
@@ -225,11 +254,11 @@
         <li><a href="mailto:anahxduart@gmail.com">anahxduart@gmail.com</a><span>Email</span></li>
         <li><a href="https://github.com/duarte-anahi" target="_blank" rel="noopener">github.com/duarte-anahi</a><span>Código</span></li>
       </ul>
-      <div class="foot"><span>Anahí Duarte</span><span>12</span></div>
+      <div class="foot"><span>Anahí Duarte</span><span>14</span></div>
     </div>
   </section>
 
-  <!-- Hoja 7 · frente -->
+  <!-- Hoja 8 · frente -->
   <section class="page" data-tab="Contacto" data-color="#b8c3f2" data-ink="#111" data-name="Contacto">
     <div class="pg">
       <p class="kicker"><b>[—]</b>Notas</p>
@@ -238,15 +267,15 @@
         <div class="row"><span>Nota</span><p class="handwrite">Si llegaste hasta acá,<br>escribime :)</p></div>
         <div class="row"><span>De</span><p class="handwrite">Anah</p></div>
       </div>
-      <div class="foot"><span>Anahí Duarte</span><span>13</span></div>
+      <div class="foot"><span>Anahí Duarte</span><span>15</span></div>
     </div>
   </section>
   <!-- Última hoja sin dorso: la carpeta termina en esta doble página y no muestra una hoja vacía -->
 
 </div>
 
-<script src="js/figures.js?v=9"></script>
-<script src="js/leather.js?v=9"></script>
-<script src="js/binder.js?v=9"></script>
+<script src="js/figures.js?v=17"></script>
+<script src="js/leather.js?v=17"></script>
+<script src="js/binder.js?v=17"></script>
 </body>
 </html>

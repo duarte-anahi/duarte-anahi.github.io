@@ -42,7 +42,8 @@
   function makeTab(label, color, ink, k, target, hidden) {
     const b = document.createElement("button");
     b.className = "tab"; b.type = "button";
-    b.style.top = 3 + k * 8.4 + "em"; b.style.setProperty("--tab", color);
+    // 7.2em entre solapas: con 7 solapas y 8.4em la última se salía de la hoja
+    b.style.top = 3 + k * 7.2 + "em"; b.style.setProperty("--tab", color);
     if (ink) b.style.setProperty("--tab-ink", ink);
     b.innerHTML = "<span></span>"; b.firstChild.textContent = label;
     b.setAttribute("aria-label", "Ir a " + label);
@@ -67,6 +68,10 @@
     sheetsEl.appendChild(el);
     sheets.push({ el, ang: 0, token: 0 });
   }
+  // Caras en orden de lectura (frente de la hoja 1, dorso de la hoja 1, frente de la 2...)
+  const caras = sheets.flatMap(({ el }) => [el.querySelector(".front"), el.querySelector(".back")])
+    .filter((c) => c && c.querySelector(".pg"));
+
   // Si la última hoja no tiene dorso, no se la da vuelta: la doble página final es la anterior.
   const lastSpread = pages.length % 2 ? nSheets - 1 : nSheets;
   sheets.forEach((s, i) => rest(i));
@@ -77,7 +82,8 @@
   let isOpen = false, busy = false, spread = 0, focus = "right", zSeq = 0;
   const mobile = () => innerWidth / innerHeight < 0.8;
 
-  /* ---------- Escala: 1em = una unidad del mundo. Sin transform: scale → texto nítido ---------- */
+  /* ---------- Escala: 1em = una unidad del mundo. Sin transform: scale → texto nítido ----------
+     Se ve la carpeta entera, abierta o cerrada. Para leer en grande, se saca la hoja (ver lector). */
   function layout() {
     const u = mobile() ? Math.min(innerWidth / 46, innerHeight / 66) : Math.min(innerWidth / 100, innerHeight / 67);
     binder.style.fontSize = u + "px";
@@ -202,7 +208,7 @@
     binder.classList.remove("is-closed"); binder.classList.add("is-opening");
     strapTo(STRAP.out, 600, 480); // se desabrocha: la correa sale de la tapa
     await wait(500);
-    isOpen = true; focus = "right"; setCam();
+    isOpen = true; focus = "right"; layout();
     binder.classList.add("is-open");
     strapTo(STRAP.tucked, 0, 1100); // y se guarda bajo la carpeta
     await tween(1350, (e) => {
@@ -226,7 +232,7 @@
       if (a < 100) binder.classList.remove("rings-on"); // antes que al abrir: el fundido tiene que terminar antes de que la tapa se vea plana
     });
     clearCast();
-    isOpen = false; binder.classList.remove("is-open", "rings-on"); binder.classList.add("is-closed"); setCam();
+    isOpen = false; binder.classList.remove("is-open", "rings-on"); binder.classList.add("is-closed"); layout();
     strapTo(STRAP.out, 0, 700); // la correa sale de abajo de la carpeta...
     await wait(720);
     strapTo(STRAP.closed, 600, 480); // ...y se abrocha sobre la tapa
@@ -234,6 +240,85 @@
     binder.classList.remove("is-closing"); binder.classList.add("is-closed");
     busy = false; updateHud(); history.replaceState(null, "", location.pathname);
     strap.focus({ preventScroll: true });
+  }
+
+  /* ---------- Lector: la hoja sale de la carpeta y se agranda ---------- */
+  let lector = null;
+
+  function medidaHoja() {
+    // La hoja suelta se mide por el ancho, no por el alto: así el texto queda bastante más grande
+    // que dentro de la carpeta. Si no entra a lo alto, la hoja se desplaza.
+    const porAncho = innerWidth * 0.62 / 38.6;
+    const minimo = parseFloat(binder.style.fontSize) * 1.35; // siempre más grande que en la carpeta
+    return Math.max(minimo, Math.min(porAncho, 26));
+  }
+
+  function abrirLector(cara) {
+    if (lector) return;
+    const indice = caras.indexOf(cara);
+    if (indice < 0) return;
+
+    const fondo = document.createElement("div");
+    fondo.className = "lector";
+    const hoja = document.createElement("div");
+    hoja.className = "hoja" + (cara.classList.contains("dark") ? " dark" : "");
+    hoja.style.fontSize = medidaHoja() + "px";
+    hoja.appendChild(cara.querySelector(".clip").cloneNode(true));
+
+    const barra = document.createElement("div");
+    barra.className = "lector-barra";
+    const btn = (txt, etiqueta) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = txt; b.setAttribute("aria-label", etiqueta);
+      return b;
+    };
+    const anterior = btn("←", "Hoja anterior"), siguiente = btn("→", "Hoja siguiente"), cerrar = btn("Cerrar", "Cerrar la hoja");
+    const cuenta = document.createElement("span");
+    barra.append(anterior, cuenta, siguiente, cerrar);
+
+    fondo.append(hoja, barra);
+    document.body.appendChild(fondo);
+    lector = { fondo, hoja, cuenta, anterior, siguiente, indice: -1, origen: cara };
+
+    // FLIP: arranca del tamaño y lugar que tenía dentro de la carpeta y crece hasta el centro
+    const desde = cara.getBoundingClientRect(), hasta = hoja.getBoundingClientRect();
+    const escala = desde.width / hasta.width;
+    hoja.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${escala})`;
+    hoja.getBoundingClientRect();
+    hoja.style.transition = "transform .45s cubic-bezier(.3,.7,.25,1)";
+    hoja.style.transform = "none";
+    requestAnimationFrame(() => fondo.classList.add("on"));
+
+    mostrarCara(indice);
+    anterior.onclick = () => mostrarCara(lector.indice - 1);
+    siguiente.onclick = () => mostrarCara(lector.indice + 1);
+    cerrar.onclick = cerrarLector;
+    fondo.addEventListener("click", (e) => { if (e.target === fondo) cerrarLector(); });
+  }
+
+  function mostrarCara(i) {
+    if (!lector || i < 0 || i >= caras.length || i === lector.indice) return;
+    const cara = caras[i];
+    lector.indice = i;
+    lector.origen = cara;
+    lector.hoja.classList.toggle("dark", cara.classList.contains("dark"));
+    lector.hoja.replaceChild(cara.querySelector(".clip").cloneNode(true), lector.hoja.firstChild);
+    lector.hoja.scrollTop = 0;
+    lector.cuenta.textContent = `${i + 1} / ${caras.length}`;
+    lector.anterior.disabled = i === 0;
+    lector.siguiente.disabled = i === caras.length - 1;
+  }
+
+  function cerrarLector() {
+    if (!lector) return;
+    const { fondo, hoja, origen, indice } = lector;
+    lector = null;
+    // al cerrar, la carpeta queda abierta en la doble página de esa hoja
+    goTo(indice % 2 ? Math.floor(indice / 2) + 1 : indice / 2);
+    const desde = origen.getBoundingClientRect(), hasta = hoja.getBoundingClientRect();
+    hoja.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${desde.width / hasta.width})`;
+    fondo.classList.remove("on");
+    setTimeout(() => fondo.remove(), 380);
   }
 
   /* ---------- HUD e interacción ---------- */
@@ -253,6 +338,12 @@
   cover.addEventListener("animationend", () => binder.classList.remove("nudge"));
 
   addEventListener("keydown", (e) => {
+    if (lector) {
+      if (e.key === "Escape") cerrarLector();
+      else if (e.key === "ArrowRight" || e.key === "PageDown") mostrarCara(lector.indice + 1);
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") mostrarCara(lector.indice - 1);
+      return;
+    }
     if (e.key === "ArrowRight" || e.key === "PageDown") next();
     else if (e.key === "ArrowLeft" || e.key === "PageUp") prev();
     else if (e.key === "Escape") closeBinder();
@@ -267,8 +358,8 @@
     if (e.target.closest("a, button") || String(getSelection())) return;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) return dx < 0 ? next() : prev();
     if (Math.hypot(dx, dy) < 6 && Date.now() - d.t < 400) {
-      const hingeX = binder.getBoundingClientRect().left;
-      e.clientX > hingeX ? next() : prev();
+      const cara = e.target.closest(".face");
+      if (cara) abrirLector(cara); // tocar la hoja = sacarla de la carpeta y leerla en grande
     }
   });
 
