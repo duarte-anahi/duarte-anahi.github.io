@@ -85,14 +85,14 @@
   /* ---------- Escala: 1em = una unidad del mundo. Sin transform: scale → texto nítido ----------
      Se ve la carpeta entera, abierta o cerrada. Para leer en grande, se saca la hoja (ver lector). */
   function layout() {
-    const u = mobile() ? Math.min(innerWidth / 46, innerHeight / 66) : Math.min(innerWidth / 100, innerHeight / 67);
+    const u = mobile() ? Math.min(innerWidth / 66, innerHeight / 66) : Math.min(innerWidth / 132, innerHeight / 67);
     binder.style.fontSize = u + "px";
     setCam();
   }
   function setCam() {
     let x = 0;
-    if (!isOpen) x = -22;
-    else if (mobile()) x = focus === "right" ? -20.6 : 20.6;
+    if (!isOpen) x = -31.6;
+    else if (mobile()) x = focus === "right" ? -31 : 31;
     binder.style.setProperty("--camx", x + "em");
     binder.style.perspectiveOrigin = -x + "em 0";
   }
@@ -130,13 +130,13 @@
   function cast(a) {
     const r = (a * Math.PI) / 180, lift = Math.sin(r);
     if (a <= 90) {
-      const reach = 38.6 * Math.cos(r) + 1 + 9 * lift;
+      const reach = 58.2 * Math.cos(r) + 1 + 9 * lift;
       castR.style.opacity = lift.toFixed(3); castL.style.opacity = 0;
-      castR.style.transform = `scaleX(${(reach / 38.6).toFixed(4)})`;
+      castR.style.transform = `scaleX(${(reach / 58.2).toFixed(4)})`;
     } else {
-      const reach = 38.6 * -Math.cos(r) + 1 + 5 * lift;
+      const reach = 58.2 * -Math.cos(r) + 1 + 5 * lift;
       castL.style.opacity = lift.toFixed(3); castR.style.opacity = 0;
-      castL.style.transform = `scaleX(${(reach / 38.6).toFixed(4)})`;
+      castL.style.transform = `scaleX(${(reach / 58.2).toFixed(4)})`;
     }
   }
   const clearCast = () => { castR.style.opacity = 0; castL.style.opacity = 0; };
@@ -190,7 +190,7 @@
   }
   /* Correa: cerrada (sobre la tapa), afuera (a la derecha, fuera de la tapa) y guardada (bajo la carpeta, asoma la punta).
      Solo se cambia de "arriba" a "abajo" (z-index) cuando está afuera, así nunca atraviesa la tapa. */
-  const STRAP = { closed: 28.6, out: 44.3, tucked: 30.6 };
+  const STRAP = { closed: 48.2, out: 63.9, tucked: 50.2 };
   let strapToken = 0;
   function strapTo(pos, z, ms) {
     if (reduced) ms = 1;
@@ -248,7 +248,7 @@
   function medidaHoja() {
     // La hoja suelta se mide por el ancho, no por el alto: así el texto queda bastante más grande
     // que dentro de la carpeta. Si no entra a lo alto, la hoja se desplaza.
-    const porAncho = innerWidth * 0.62 / 38.6;
+    const porAncho = innerWidth * 0.7 / 58.2;
     const minimo = parseFloat(binder.style.fontSize) * 1.35; // siempre más grande que en la carpeta
     return Math.max(minimo, Math.min(porAncho, 26));
   }
@@ -376,7 +376,7 @@
   };
   const procedural = () => {
     const u = 26; // resolución de la textura: px por unidad
-    if (window.makeLeather) makeLeather({ width: 44.4 * u, height: 60 * u, seed: 11 }).then((url) => setLeather(url, false));
+    if (window.makeLeather) makeLeather({ width: 64 * u, height: 60 * u, seed: 11 }).then((url) => setLeather(url, false));
   };
   function tryPhoto(list) {
     if (!list.length) return procedural();
@@ -395,7 +395,7 @@
   prefit.onerror = () => tryPhoto(["img/cuero.jpg", "img/cuero.jpeg", "img/cuero.png", "img/cuero.webp"]);
   prefit.src = "img/cuero-tapa.jpg";
 
-  /* Adapta cualquier foto de cuero a la tapa (vertical, 44.4 × 60):
+  /* Adapta cualquier foto de cuero a la tapa (64 × 60):
      - recorta el centro al ancho LEATHER.crop (panza + algo de costados)
      - si la foto no alcanza de alto, busca la franja de la propia foto que mejor empalma con el borde
        de abajo y la continúa desde ahí con un fundido (sin espejo ni corte)
@@ -404,7 +404,7 @@
   function fitPhoto(img) {
     const sw = img.naturalWidth * LEATHER.crop, sx = (img.naturalWidth - sw) / 2;
     // ancho = resolución real del recorte (antes 1160 fijo: achicaba la foto y el cuero perdía nitidez)
-    const W = Math.round(Math.min(2048, sw)), H = Math.round(W * 60 / 44.4);
+    const W = Math.round(Math.min(2048, sw)), H = Math.round(W * 60 / 64);
     const k = W / sw, ih = img.naturalHeight * k;
     const nh = img.naturalHeight;
     const c = document.createElement("canvas"); c.width = W; c.height = H;

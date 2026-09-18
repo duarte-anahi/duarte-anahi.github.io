@@ -59,29 +59,29 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 
 /* Sombra sobre la mesa: dos sombras fijas (cerrada y abierta) que se funden con opacidad.
    Animar ancho/posición de una sombra tan difusa obligaba a redibujarla en cada cuadro. */
-.drop-shadow { left: -1em; top: -29em; width: 46em; height: 60em; }
+.drop-shadow { left: -1em; top: -29em; width: 65.6em; height: 60em; }
 .drop-shadow::before, .drop-shadow::after {
   content: ""; position: absolute; top: 0; bottom: 0; border-radius: 2em;
   box-shadow: 1.5em 2.2em 4em rgba(0,0,0,.85), .4em .6em 1em rgba(0,0,0,.6);
   transition: opacity 1.15s cubic-bezier(.6,.05,.25,1);
 }
-.drop-shadow::before { left: 0; width: 46em; }
-.drop-shadow::after { left: -43em; width: 89em; opacity: 0; }
+.drop-shadow::before { left: 0; width: 65.6em; }
+.drop-shadow::after { left: -62.6em; width: 128.2em; opacity: 0; }
 .is-open .drop-shadow::before { opacity: 0; }
 .is-open .drop-shadow::after { opacity: 1; }
 
-.cover-back { left: -.4em; top: -30em; width: 44.4em; height: 60em; z-index: 1; }
+.cover-back { left: -.4em; top: -30em; width: 64em; height: 60em; z-index: 1; }
 .cover-back.leather { background-position: 0 0; }
 
 /* Correa con hebilla metálica (img/hebilla.png, recorte de la imagen de Gemini).
    Cerrada: cruza sobre la tapa y la punta asoma por el canto. Las posiciones al abrir/cerrar las mueve binder.js. */
 /* Se mueve con transform (--sx lo define binder.js), no con left: así no recalcula el layout en cada cuadro. */
-.strap { left: 28.6em; top: -3.1em; width: 16.36em; z-index: 600; line-height: 0; transform: translateX(var(--sx, 0em)); }
+.strap { left: 48.2em; top: -3.1em; width: 16.36em; z-index: 600; line-height: 0; transform: translateX(var(--sx, 0em)); }
 .strap img { width: 100%; height: auto; display: block; filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)); }
 
 /* ===== Tapa frontal (gira) ===== */
 .cover-front {
-  left: -.4em; top: -30em; width: 44.4em; height: 60em; z-index: 500;
+  left: -.4em; top: -30em; width: 64em; height: 60em; z-index: 500;
   transform-origin: .4em 50%; transform-style: preserve-3d;
   will-change: transform; /* capa propia desde el inicio: el primer cuadro del giro no tiene que prepararla */
 }
@@ -89,7 +89,7 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .cover-front .inside { transform: rotateY(180deg); background-position: 100% 0; }
 /* Nombre estampado en plata: recorte de la imagen de Gemini (img/nombre.png), no texto de código.
    La sombra lo "hunde" en el cuero como un estampado a fuego real. */
-.cover-name { position: absolute; left: 4.6em; top: 5.2em; width: 23em; margin: 0; font-size: 1em; line-height: 0; }
+.cover-name { position: absolute; left: 6em; top: 5.2em; width: 30em; margin: 0; font-size: 1em; line-height: 0; }
 .cover-name img {
   width: 100%; height: auto; display: block;
   filter: drop-shadow(0 .07em .04em rgba(0,30,35,.6)) drop-shadow(0 -.03em 0 rgba(255,255,255,.12));
@@ -123,17 +123,20 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .pocket {
   position: absolute; left: 4.5em; right: 4em; bottom: 4.5em; height: 18em; border-radius: .6em 1.2em .6em .6em;
   /* misma escala que la tapa (sin estirar ni ampliar = sin pixelar); solo corrida para que las escamas no calcen con las de atrás */
-  background-size: 44.4em 60em; background-position: -9em -21em;
+  background-size: 64em 60em; background-position: -14em -21em;
   box-shadow: 0 -.25em .5em rgba(0,0,0,.55);
   z-index: 2;
 }
 .card {
-  position: absolute; left: 7em; bottom: 15em; width: 28em; height: 17em; z-index: 1;
-  padding: 2.2em 2.4em; transform: rotate(-3deg);
+  position: absolute; left: 11em; bottom: 14.2em; width: 28em; height: 17em; z-index: 1;
+  padding: 2.2em 2.4em; transform: rotate(-3deg) translateY(0);
   background: #ecebe6 var(--paper-noise); color: var(--ink);
   box-shadow: .2em .35em .6em rgba(0,0,0,.6);
   font-size: 1em;
+  transition: transform .45s cubic-bezier(.3,.7,.25,1);
 }
+/* al pasar el cursor por el bolsillo o por la tarjeta, la tarjeta sale un poco, como si la sacaras */
+.is-open .pocket:hover + .card, .is-open .card:hover { transform: rotate(-3deg) translateY(-3.4em); }
 
 /* ===== Mecanismo de anillas ===== */
 /* Foto real del mecanismo (img/anillas.png, recorte de la imagen de Gemini).
@@ -166,7 +169,7 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 /* ===== Hojas ===== */
 .sheet {
   /* empieza donde termina la barra (media barra = 3em): así nunca la tapa y las anillas quedan por encima */
-  position: absolute; left: 3.1em; top: -28em; width: 38.6em; height: 56em;
+  position: absolute; left: 3.1em; top: -28em; width: 58.2em; height: 56em;
   transform-origin: -3.1em 50%; transform-style: preserve-3d; /* bisagra = centro de las anillas */
 }
 .sheet .face {
@@ -217,9 +220,9 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 
 /* sombra que proyecta la hoja que gira sobre las de abajo */
 /* Degradé fijo: binder.js solo cambia opacidad y ancho (scaleX), que no obligan a redibujar. */
-.cast { top: -28em; height: 56em; width: 38.6em; z-index: 260; pointer-events: none; opacity: 0; will-change: transform, opacity; }
+.cast { top: -28em; height: 56em; width: 58.2em; z-index: 260; pointer-events: none; opacity: 0; will-change: transform, opacity; }
 .cast-r { left: 3.1em; transform-origin: 0 50%; background: linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.2) 72%, rgba(0,0,0,0)); }
-.cast-l { left: -41.7em; transform-origin: 100% 50%; background: linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,.12) 80%, rgba(0,0,0,0)); }
+.cast-l { left: -61.3em; transform-origin: 100% 50%; background: linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,.12) 80%, rgba(0,0,0,0)); }
 
 /* ===== Hoja suelta: al tocar una hoja, sale de la carpeta y se agranda para leerla ===== */
 .lector {
@@ -229,7 +232,7 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .lector.on { opacity: 1; }
 .lector .hoja {
   /* la hoja suelta se agranda todo lo que dé el ancho; si el texto no entra, se desplaza */
-  position: relative; width: 38.6em; min-height: 56em; max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
+  position: relative; width: 58.2em; min-height: 56em; max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
   background-color: var(--paper);
   background-image: var(--paper-noise), linear-gradient(115deg, #fbfaf6 0%, #f0eee7 55%, #e6e3db 100%);
   box-shadow: 0 1.5em 4em rgba(0,0,0,.75), 0 .2em .6em rgba(0,0,0,.5);
