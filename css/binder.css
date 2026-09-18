@@ -135,8 +135,21 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
   font-size: 1em;
   transition: transform .45s cubic-bezier(.3,.7,.25,1);
 }
-/* al pasar el cursor por el bolsillo o por la tarjeta, la tarjeta sale un poco, como si la sacaras */
-.is-open .pocket:hover + .card, .is-open .card:hover { transform: rotate(-3deg) translateY(-3.4em); }
+/* Pistas sin texto, igual que la hebilla: el cursor cambia y cada tanto la tarjeta asoma sola.
+   Al pasar el cursor por el bolsillo o por la tarjeta, sale del todo y se frena el movimiento. */
+.is-open .pocket, .is-open .card { cursor: pointer; }
+.is-open .card { animation: asomar 9s 3s infinite; }
+.is-open .pocket:hover, .is-open .pocket:hover + .card,
+.is-open .card:hover { animation: none; }
+.is-open .pocket:hover + .card, .is-open .card:hover {
+  transform: rotate(-3deg) translateY(-3.4em);
+  box-shadow: .3em .5em .9em rgba(0,0,0,.65);
+}
+@keyframes asomar {
+  0%, 88%, 100% { transform: rotate(-3deg) translateY(0); }
+  92% { transform: rotate(-3deg) translateY(-1.4em); }
+  96% { transform: rotate(-3deg) translateY(-.35em); }
+}
 
 /* ===== Mecanismo de anillas ===== */
 /* Foto real del mecanismo (img/anillas.png, recorte de la imagen de Gemini).
