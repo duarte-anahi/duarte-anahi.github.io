@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=46">
-  <link rel="stylesheet" href="css/pages.css?v=46">
+  <link rel="stylesheet" href="css/binder.css?v=49">
+  <link rel="stylesheet" href="css/pages.css?v=49">
 </head>
 <body>
 <main class="scene">
@@ -82,8 +82,8 @@
       <p class="body" style="margin-top:1.8em">Elijo desarrollar herramientas de inteligencia artificial para complementar a las personas, priorizando modelos que puedan ejecutarse de forma local.</p>
       <p class="body">Cuando el sistema se equivoca, no me conformo con mirar la métrica de error. Me interesa investigar a fondo los resultados para explicar exactamente qué pasó y por qué.</p>
       <div class="timeline">
-        <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA · EpifanIA</div>
-        <div><b>Deep learning</b>Clasificador de animales · Autoencoder</div>
+        <div><b>Aplicaciones con modelos de lenguaje</b>TutorIA</div>
+        <div><b>Deep learning</b>Modelo convolucional · Autoencoder</div>
         <div><b>Recuperación aumentada (RAG)</b>El Contraste</div>
         <div><b>Machine learning clásico</b>FIND-S · naïve Bayes</div>
       </div>
@@ -133,67 +133,39 @@
     </div>
   </section>
 
-  <!-- Hoja 3 · dorso — Proyecto 02 (hoja negra) -->
-  <section class="page dark">
-    <div class="pg">
-      <p class="kicker"><b>[02]</b>Modelos locales</p>
-      <h2 class="title">EpifanIA</h2>
-      <p class="lead">Un asistente de escritura que corre modelos de lenguaje en la propia computadora, sin conexión a internet.</p>
-      <dl class="specs">
-        <dt>Qué hace</dt><dd>Ayuda por etapas: lluvia de ideas desde la hoja en blanco, organizar apuntes y pulir un borrador.</dd>
-        <dt>Cómo</dt><dd>Dos modelos con roles distintos: una editora precisa (Llama 3.1) y una musa creativa (Hermes 3), con distinta temperatura.</dd>
-        <dt>Memoria</dt><dd>Un solo modelo cargado en la GPU por vez: al cambiar, libera el anterior para entrar en 8 GB de VRAM.</dd>
-        <dt>Stack</dt><dd>Python · FastAPI · llama.cpp · React</dd>
-      </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/EpifanIA" target="_blank" rel="noopener">Ver repositorio ↗</a><span>06</span></div>
-    </div>
-  </section>
-
-  <!-- Hoja 4 · frente (hoja negra) -->
-  <section class="page dark" data-tab="EpifanIA" data-color="#b8c3f2" data-ink="#111" data-name="EpifanIA">
-    <div class="pg">
-      <p class="kicker"><b>[02]</b>Interfaz</p>
-      <div class="fig print" style="margin-top:3em"><img src="img/proyectos/epifania.png" alt="Pantalla de inicio de EpifanIA con la elección de perfil: estudiante o docente"></div>
-      <p class="caption"><b>Fig. 2</b> — Pantalla de inicio. Antes de entrar al editor se elige un perfil: estudiante o docente.</p>
-      <div class="rule"></div>
-      <p class="body">Pendiente: el backend todavía no usa el perfil elegido para adaptar las respuestas.</p>
-      <div class="foot"><span>EpifanIA</span><span>07</span></div>
-    </div>
-  </section>
-
   <!-- Hoja 4 · dorso — Proyecto 03 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker"><b>[03]</b>Visión por computadora</p>
-      <h2 class="title">Clasificador<br>de animales</h2>
-      <p class="lead">Una red convolucional para 8 especies, y el diagnóstico de por qué no logra generalizar.</p>
+      <p class="kicker"><b>[02]</b>Visión por computadora</p>
+      <h2 class="title">Modelo<br>convolucional</h2>
+      <p class="lead">Diseño, entrenamiento y diagnóstico de una red convolucional para clasificar imágenes en 8 clases.</p>
       <dl class="specs">
-        <dt>Datos</dt><dd>1.567 imágenes de 8 clases, divididas 80/20 entre entrenamiento y validación.</dd>
-        <dt>Modelos</dt><dd>V1 con filtros crecientes (~2.6M parámetros) y V2 con 32 filtros fijos (~619K).</dd>
-        <dt>Resultado</dt><dd>99% de accuracy en entrenamiento y ~59% en validación, en las dos versiones.</dd>
+        <dt>Arquitectura</dt><dd>Cuatro bloques Conv2D + MaxPooling con filtros crecientes (32 → 64 → 128 → 128) y un clasificador denso de 8 salidas: ~2,6M de parámetros.</dd>
+        <dt>Entrenamiento</dt><dd>1.567 imágenes a 200×200, división 80/20, optimizador Adam y 15 épocas.</dd>
+        <dt>Experimento</dt><dd>Una segunda versión con 32 filtros fijos en todos los bloques (~619K parámetros, 75% menos) para contrastar capacidad y generalización.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/CNN" target="_blank" rel="noopener">Ver repositorio ↗</a><span>08</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/CNN" target="_blank" rel="noopener">Ver repositorio ↗</a><span>06</span></div>
     </div>
   </section>
 
   <!-- Hoja 5 · frente -->
-  <section class="page" data-tab="Deep learning" data-color="#efede7" data-ink="#111" data-name="Clasificador de animales">
+  <section class="page" data-tab="Deep learning" data-color="#efede7" data-ink="#111" data-name="Modelo convolucional">
     <div class="pg">
-      <p class="kicker"><b>[03]</b>Resultados</p>
-      <div class="fig print"><img src="img/proyectos/cnn-curvas.png" alt="Curvas de accuracy y loss de entrenamiento y validación para las versiones V1 y V2"></div>
-      <p class="caption"><b>Fig. 3</b> — V1 vs V2. La pérdida de validación sube desde la época 6 mientras la de entrenamiento sigue bajando.</p>
+      <p class="kicker"><b>[02]</b>Diagnóstico</p>
+      <div class="fig print"><img src="img/proyectos/cnn-curvas.png" alt="Curvas de accuracy y loss de entrenamiento y validación para las dos versiones del modelo"></div>
+      <p class="caption"><b>Fig. 3</b> — Las dos versiones: la pérdida de validación sube desde la época 6 mientras la de entrenamiento sigue bajando.</p>
       <div class="rule"></div>
-      <p class="body">Achicar el modelo un 75% no mejoró la generalización: el cuello de botella es el dataset, no la arquitectura.</p>
-      <p class="body">En la prueba, Tom (de <i>Tom y Jerry</i>) salió clasificado como ave, con 70% de confianza.</p>
-      <div class="foot"><span>Clasificador de animales</span><span>09</span></div>
+      <p class="body">Las dos versiones llegan al 99% en entrenamiento y se estancan cerca del 59% en validación: el modelo memoriza. Recortar el 75% de los parámetros no cambió nada, así que el límite está en los datos.</p>
+      <p class="body">Lo aprendido: si la pérdida de validación sube mientras la de entrenamiento baja, hay que dejar de tocar capas y mirar los datos.</p>
+      <div class="foot"><span>Modelo convolucional</span><span>07</span></div>
     </div>
   </section>
 
   <!-- Hoja 5 · dorso — Proyecto 04 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker"><b>[04]</b>Deep learning</p>
+      <p class="kicker"><b>[03]</b>Deep learning</p>
       <h2 class="title">Autoencoder<br>de caracteres</h2>
       <p class="lead">Comprimir letras de 7×5 píxeles en solo dos números, y volver a reconstruirlas.</p>
       <dl class="specs">
@@ -202,26 +174,26 @@
         <dt>Variante</dt><dd>Denoising autoencoder: entrada con ruido, salida limpia.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/autoencoder" target="_blank" rel="noopener">Ver repositorio ↗</a><span>10</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/autoencoder" target="_blank" rel="noopener">Ver repositorio ↗</a><span>08</span></div>
     </div>
   </section>
 
   <!-- Hoja 6 · frente -->
   <section class="page" data-name="Autoencoder">
     <div class="pg">
-      <p class="kicker"><b>[04]</b>Espacio latente</p>
+      <p class="kicker"><b>[03]</b>Espacio latente</p>
       <div class="fig print" style="width:74%;align-self:center"><img src="img/proyectos/autoencoder-latente.png" alt="Gráfico del espacio latente 2D con cada carácter ubicado según sus coordenadas"></div>
       <p class="caption"><b>Fig. 4</b> — Cada carácter ubicado según sus dos valores latentes. Las formas parecidas quedan cerca.</p>
       <div class="rule"></div>
       <p class="body">Con 5% de ruido reconstruye bien; con 30% devuelve otro carácter. Con solo 32 muestras, la red memoriza en lugar de generalizar.</p>
-      <div class="foot"><span>Autoencoder</span><span>11</span></div>
+      <div class="foot"><span>Autoencoder</span><span>09</span></div>
     </div>
   </section>
 
   <!-- Hoja 6 · dorso — Proyecto 05 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker"><b>[05]</b>RAG y verificación</p>
+      <p class="kicker"><b>[04]</b>RAG y verificación</p>
       <h2 class="title">EL<br>CONTRASTE</h2>
       <p class="lead">Un auditor que evalúa una noticia contra un corpus de estándares periodísticos y muestra cuáles usó.</p>
       <dl class="specs">
@@ -230,26 +202,26 @@
         <dt>Recuperación</dt><dd>Híbrida: los 15 estándares generales entran siempre; los 34 temáticos, solo si superan un umbral de relevancia.</dd>
         <dt>Stack</dt><dd>Python · FastAPI · LangChain · Chroma · HTML, CSS y JS</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>10</span></div>
     </div>
   </section>
 
   <!-- Hoja 7 · frente -->
   <section class="page" data-tab="El Contraste" data-color="#dfd6c6" data-ink="#111" data-name="El Contraste">
     <div class="pg">
-      <p class="kicker"><b>[05]</b>Interfaz</p>
+      <p class="kicker"><b>[04]</b>Interfaz</p>
       <div class="fig print"><img src="img/proyectos/contraste.png" alt="Interfaz de EL CONTRASTE con forma de diario: cabecera, campo para pegar la noticia y ficha técnica"></div>
       <p class="caption"><b>Fig. 5</b> — La interfaz tiene forma de diario: se pega la noticia, se elige el modelo y el dictamen sale como nota de tapa.</p>
       <div class="rule"></div>
       <p class="body">Los embeddings corren en la propia máquina y las claves quedan en el backend. Cambiar de proveedor de modelo es una línea de configuración.</p>
-      <div class="foot"><span>El Contraste</span><span>13</span></div>
+      <div class="foot"><span>El Contraste</span><span>11</span></div>
     </div>
   </section>
 
   <!-- Hoja 7 · dorso — Proyecto 06 -->
   <section class="page">
     <div class="pg">
-      <p class="kicker"><b>[06]</b>Aprendizaje automático</p>
+      <p class="kicker"><b>[05]</b>Aprendizaje automático</p>
       <h2 class="title">FIND-S y<br>naïve Bayes</h2>
       <p class="lead">Dos algoritmos clásicos implementados desde cero con NumPy sobre 45.000 solicitudes de préstamo.</p>
       <dl class="specs">
@@ -258,19 +230,19 @@
         <dt>Naïve Bayes</dt><dd>Suavizado de Laplace y logaritmos para evitar el underflow. Accuracy 0,77 · F1 0,41 · AUC 0,84.</dd>
         <dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/algoritmos-find-s-naive-bayes" target="_blank" rel="noopener">Ver repositorio ↗</a><span>14</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/algoritmos-find-s-naive-bayes" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
     </div>
   </section>
 
   <!-- Hoja 8 · frente -->
   <section class="page" data-tab="Algoritmos" data-color="#c9d3cd" data-ink="#111" data-name="FIND-S y naïve Bayes">
     <div class="pg">
-      <p class="kicker"><b>[06]</b>Resultados</p>
+      <p class="kicker"><b>[05]</b>Resultados</p>
       <div class="fig print" style="width:72%;align-self:center"><img src="img/proyectos/roc.png" alt="Curva ROC del conjunto de prueba, con AUC de 0,84"></div>
       <p class="caption"><b>Fig. 6</b> — Curva ROC del conjunto de prueba: AUC 0,84 sobre 145 umbrales distintos.</p>
       <div class="rule"></div>
       <p class="body">La accuracy de 0,77 engaña: 229 de los 285 casos son de una sola clase y el modelo no reconoce más de la mitad de los préstamos otorgados. El AUC muestra que el problema está en el umbral, no en el orden que produce el modelo.</p>
-      <div class="foot"><span>FIND-S y naïve Bayes</span><span>15</span></div>
+      <div class="foot"><span>FIND-S y naïve Bayes</span><span>13</span></div>
     </div>
   </section>
 
@@ -284,7 +256,7 @@
         <li><a href="mailto:anahxduart@gmail.com">anahxduart@gmail.com</a><span>Email</span></li>
         <li><a href="https://github.com/duarte-anahi" target="_blank" rel="noopener">github.com/duarte-anahi</a><span>Código</span></li>
       </ul>
-      <div class="foot"><span></span><span>16</span></div>
+      <div class="foot"><span></span><span>14</span></div>
     </div>
   </section>
 
@@ -297,15 +269,15 @@
         <div class="row"><span>Nota</span><p class="handwrite">Si llegaste hasta acá,<br>escribime :)</p></div>
         <div class="row"><span>De</span><p class="handwrite">Anah</p></div>
       </div>
-      <div class="foot"><span></span><span>17</span></div>
+      <div class="foot"><span></span><span>15</span></div>
     </div>
   </section>
   <!-- Última hoja sin dorso: la carpeta termina en esta doble página y no muestra una hoja vacía -->
 
 </div>
 
-<script src="js/figures.js?v=46"></script>
-<script src="js/leather.js?v=46"></script>
-<script src="js/binder.js?v=46"></script>
+<script src="js/figures.js?v=49"></script>
+<script src="js/leather.js?v=49"></script>
+<script src="js/binder.js?v=49"></script>
 </body>
 </html>
