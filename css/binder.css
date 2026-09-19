@@ -99,11 +99,13 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .is-closed .strap:hover { transform: translateX(calc(var(--sx, 0em) + .35em)); filter: brightness(1.12); }
 .strap:focus { outline: none; }
 .strap:focus-visible img { outline: .15em solid rgba(255,255,255,.75); outline-offset: .2em; border-radius: .8em; }
-.is-closed .strap img { animation: glint 7s 3s infinite; }
+.is-closed .strap img { animation: glint 5s 2s infinite; }
 .is-closed .strap:hover img { animation: none; }
+/* Ciclo de 5s: los porcentajes se corrieron para que el destello siga durando lo mismo
+   (~0.35s de subida) y solo se acorte la espera entre uno y otro. */
 @keyframes glint {
-  0%, 88%, 100% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1); }
-  93% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1.3); }
+  0%, 83%, 100% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1); }
+  90% { filter: drop-shadow(.2em .4em .3em rgba(0,0,0,.45)) brightness(1.3); }
 }
 
 /* click en la tapa: se levanta apenas y la correa la frena */
@@ -230,6 +232,10 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .tab:focus-visible { outline: .15em solid #fff; outline-offset: .15em; }
 .sheet .face { overflow: visible; }
 .sheet .face .clip { position: absolute; inset: 0; overflow: hidden; }
+/* Solo la hoja que se está leyendo deja salir la foto por el canto; las de abajo siguen
+   recortadas (si no, se vería el texto de las otras hojas) y durante el giro vuelve el recorte. */
+.sheet .face.activa .clip { overflow: visible; }
+.sheet.girando .face .clip { overflow: hidden; }
 
 /* sombra que proyecta la hoja que gira sobre las de abajo */
 /* Degradé fijo: binder.js solo cambia opacidad y ancho (scaleX), que no obligan a redibujar. */
@@ -237,42 +243,24 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .cast-r { left: 3.1em; transform-origin: 0 50%; background: linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.2) 72%, rgba(0,0,0,0)); }
 .cast-l { left: -61.3em; transform-origin: 100% 50%; background: linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,.12) 80%, rgba(0,0,0,0)); }
 
-/* ===== Hoja suelta: al tocar una hoja, sale de la carpeta y se agranda para leerla ===== */
-.lector {
-  position: fixed; inset: 0; z-index: 800; display: grid; place-items: center;
-  background: rgba(4,4,4,.78); opacity: 0; transition: opacity .35s ease;
+/* ===== Visor: al tocar una imagen, se agranda sobre la carpeta ===== */
+.visor {
+  position: fixed; inset: 0; z-index: 800; display: grid; place-items: center; gap: 1.2rem;
+  grid-auto-rows: min-content; align-content: center; padding: 4vh 4vw; cursor: zoom-out;
+  background: rgba(4,4,4,.82); opacity: 0; transition: opacity .35s ease;
 }
-.lector.on { opacity: 1; }
-.lector .hoja {
-  /* la hoja suelta se agranda todo lo que dé el ancho; si el texto no entra, se desplaza */
-  position: relative; width: 58.2em; min-height: 56em; max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
-  background-color: var(--paper);
-  background-image: var(--paper-noise), linear-gradient(115deg, #fbfaf6 0%, #f0eee7 55%, #e6e3db 100%);
-  box-shadow: 0 1.5em 4em rgba(0,0,0,.75), 0 .2em .6em rgba(0,0,0,.5);
-  transform-origin: 0 0; will-change: transform;
+.visor.on { opacity: 1; }
+.visor img {
+  max-width: 92vw; max-height: 84vh; display: block;
+  background: #fcfbf8; padding: .5rem;
+  box-shadow: 0 1.2rem 3rem rgba(0,0,0,.7);
 }
-.lector .hoja.dark {
-  background-color: #0e0f10; color: #e9e9e6;
-  background-image: var(--paper-noise), linear-gradient(115deg, #17191b, #0c0d0e);
+.visor-pie {
+  margin: 0; max-width: 60rem; text-align: center;
+  font: 400 14px/1.5 "Inter Tight", sans-serif; color: rgba(255,255,255,.7);
 }
-/* la hoja suelta no tiene anillas: el texto usa todo el margen y fluye (no va posicionado) */
-.lector .pg { position: static; min-height: 56em; padding: 4.6em 4.4em 3.4em 4.4em; }
-.lector .hoja::-webkit-scrollbar { width: .5em; }
-.lector .hoja::-webkit-scrollbar-thumb { background: rgba(0,0,0,.25); border-radius: 1em; }
-.lector-barra {
-  /* arriba a la derecha, fuera de la hoja: si estuviera abajo taparía el texto al desplazarse */
-  position: fixed; top: 2.2vh; right: 2vw; z-index: 810;
-  display: flex; gap: .6rem; align-items: center;
-  font: 500 12px/1 "Inter Tight", sans-serif; letter-spacing: .12em; text-transform: uppercase;
-  color: rgba(255,255,255,.75);
-  padding: .5rem .7rem; border-radius: 999px; background: rgba(10,10,10,.72); backdrop-filter: blur(6px);
-}
-.lector-barra button {
-  background: rgba(255,255,255,.06); color: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.14);
-  border-radius: 999px; padding: .55rem .9rem; font: inherit; letter-spacing: inherit; cursor: pointer;
-}
-.lector-barra button:hover { background: rgba(255,255,255,.14); }
-.lector-barra button:disabled { opacity: .3; cursor: default; }
+/* la imagen dentro de la hoja avisa que se puede agrandar */
+.fig img { cursor: zoom-in; }
 
 /* ===== HUD ===== */
 .hud {

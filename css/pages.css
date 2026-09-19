@@ -7,6 +7,8 @@
   --ink-page: #111;
   --accent: #2340d8;
   --muted: #74726c;
+  --resalte: #cfc4ee;        /* cartulina violeta bajo los titulos */
+  --resalte-dark: #6d5ea8;
 }
 
 /* ===== Página ===== */
@@ -16,11 +18,33 @@
 .pg a { color: inherit; text-decoration-thickness: .06em; text-underline-offset: .18em; }
 .pg a:hover { color: var(--accent); }
 
+/* hoja con el contenido centrado en vertical: el pie sigue abajo */
+.pg.centrado > :first-child { margin-top: auto !important; }
+
 /* [01] Etiqueta chica, como las fichas técnicas */
 .kicker { font: 500 1.45em/1.2 var(--sans); letter-spacing: -.005em; color: var(--muted); }
 .kicker b { font-weight: 600; color: var(--ink-page); margin-right: .45em; }
 .title { font-weight: 600; font-size: 5.6em; line-height: .96; letter-spacing: -.045em; margin-top: .3em !important; }
 .title.xl { font-size: 7.8em; letter-spacing: -.05em; }
+/* El título va sobre una cartulina violeta apoyada en la hoja. Se recorta al ancho del texto
+   (align-self) y el margen negativo compensa el relleno, así la primera letra queda alineada
+   con el resto. El degradado simula la luz cayendo desde arriba y la sombra la despega del papel;
+   el grano es el mismo ruido que usa la hoja, en multiply, para que no parezca un color plano. */
+.title {
+  align-self: flex-start;
+  position: relative;
+  background-color: var(--resalte);
+  /* Radial, no lineal: la cartulina se aclara donde le pega la luz (arriba a la izquierda)
+     y se va apagando hacia los bordes, como en la foto del papel verde. */
+  background-image: var(--paper-noise),
+    radial-gradient(125% 115% at 34% 18%, rgba(255,255,255,.46) 0%, rgba(255,255,255,.12) 34%, rgba(0,0,0,.05) 62%, rgba(0,0,0,.17) 88%, rgba(0,0,0,.24) 100%);
+  background-blend-mode: multiply, normal;
+  background-size: 180px 180px, auto;
+  padding: .26em .3em .32em;
+  margin-left: -.3em;
+  box-shadow: .04em .09em .3em rgba(0,0,0,.26), 0 0 0 .018em rgba(0,0,0,.07);
+}
+.dark .title { background-color: var(--resalte-dark); box-shadow: .04em .09em .3em rgba(0,0,0,.5); }
 .lead { font-size: 1.85em; line-height: 1.28; letter-spacing: -.015em; color: #2a2a28; margin-top: 1.2em !important; max-width: 25em; }
 .body { font-size: 1.58em; line-height: 1.42; letter-spacing: -.005em; color: #2c2c2a; }
 .body + .body { margin-top: .9em; }
@@ -35,8 +59,29 @@
 .dark .print { mix-blend-mode: screen; }
 .fig { margin-top: 1.6em; display: flex; justify-content: center; }
 .fig svg, .fig img { display: block; width: 100%; height: auto; max-height: 26em; object-fit: contain; }
-.fig img { outline: .07em solid rgba(0,0,0,.85); outline-offset: -.07em; }
-.dark .fig img { outline-color: rgba(255,255,255,.35); }
+
+/* Foto apoyada sobre la hoja, no impresa: marco blanco, sombra propia y apenas torcida.
+   Se sale un poco del ancho del texto, como una foto que alguien dejó ahí. */
+/* La foto crece desde su borde de abajo: al agrandarse se sale por el canto de arriba
+   y tapa el borde del cuaderno. Manda el ancho; el alto sale de su proporción. */
+.fig.foto { width: 76%; margin-left: 0; align-self: flex-start; position: relative; z-index: 3; }
+.fig.foto + .kicker { margin-top: 2.2em; } /* la foto está torcida: el rótulo necesita aire */
+.kicker + .caption { margin-top: .6em; }
+.fig.foto img {
+  padding: .5em; background: #fcfbf8;
+  box-shadow: .25em .5em 1.1em rgba(0,0,0,.4), 0 0 0 .06em rgba(0,0,0,.18);
+  transform-origin: 0% 100%;             /* crece hacia arriba y hacia la derecha, nunca sobre el lomo */
+  transform: rotate(-1.4deg) scale(1);   /* en reposo entra en la hoja: así no se ve cortada al pasar de página */
+  transition: transform .3s ease-in, box-shadow .3s ease-in;   /* al irse, se achica rápido */
+}
+.dark .fig.foto img { background: #f2f1ec; }
+/* Con la hoja ya apoyada, la foto crece y se sale por el canto (binder.js marca la cara visible).
+   Al pasar de página la clase se saca primero: la foto se achica y entra en la hoja antes del giro. */
+.activa .fig.foto img {
+  transform: rotate(-1.4deg) scale(1.42);
+  box-shadow: .25em .5em 1.1em rgba(0,0,0,.4), 0 0 0 .06em rgba(0,0,0,.18);
+  transition: transform .75s cubic-bezier(.25,.8,.3,1), box-shadow .75s ease;
+}
 .caption { font: 400 1.25em/1.4 var(--sans); color: var(--muted); margin-top: .9em; }
 .caption b { font-weight: 600; color: var(--ink-page); }
 

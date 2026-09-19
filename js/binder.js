@@ -145,10 +145,11 @@
   async function flip(i, to, dur) {
     const s = sheets[i], from = s.ang, token = ++s.token;
     s.el.style.zIndex = 400 + ++zSeq;
+    s.el.classList.add("girando");   // mientras gira, la hoja recorta lo que se sale
     flipping++;
     const done = await tween(dur, (e) => { const a = from + (to - from) * e; paint(i, a); cast(a); }, () => s.token === token);
     flipping--;
-    if (done) { rest(i); if (!flipping) clearCast(); }
+    if (done) { rest(i); s.el.classList.remove("girando"); if (!flipping) clearCast(); }
   }
 
   function goTo(target) {
@@ -156,6 +157,7 @@
     target = Math.max(0, Math.min(lastSpread, target));
     if (target === spread) return;
     const jumps = Math.abs(target - spread), dur = jumps > 1 ? 750 : 950, gap = jumps > 1 ? 110 : 0;
+    caras.forEach((c) => c.classList.remove("activa")); // las fotos se achican antes de que la hoja gire
     const list = [];
     if (target > spread) for (let i = spread; i < target; i++) list.push([i, 180]);
     else for (let i = spread - 1; i >= target; i--) list.push([i, 0]);
@@ -165,6 +167,7 @@
     if (target === nSheets) focus = "left"; // solo ocurre cuando la última hoja tiene dorso
     spread = target;
     setCam(); updateHud();
+    setTimeout(marcarVisibles, dur + gap * (list.length - 1) + 80); // recién cuando la hoja se apoya
     history.replaceState(null, "", "#" + spread);
   }
 
@@ -218,7 +221,7 @@
     });
     clearCast();
     binder.classList.remove("is-opening");
-    busy = false; updateHud();
+    busy = false; updateHud(); marcarVisibles();
     strap.blur();
   }
   async function closeBinder() {
@@ -242,81 +245,55 @@
     strap.focus({ preventScroll: true });
   }
 
-  /* ---------- Lector: la hoja sale de la carpeta y se agranda ---------- */
-  let lector = null;
-
-  function medidaHoja() {
-    // La hoja suelta se mide por el ancho, no por el alto: así el texto queda bastante más grande
-    // que dentro de la carpeta. Si no entra a lo alto, la hoja se desplaza.
-    const porAncho = innerWidth * 0.7 / 58.2;
-    const minimo = parseFloat(binder.style.fontSize) * 1.35; // siempre más grande que en la carpeta
-    return Math.max(minimo, Math.min(porAncho, 26));
+  // Marca las dos caras de la doble página actual: sus fotos crecen y se salen por el canto.
+  function marcarVisibles() {
+    caras.forEach((c) => c.classList.remove("activa"));
+    const izquierda = sheets[spread - 1] && sheets[spread - 1].el.querySelector(".back");
+    const derecha = sheets[spread] && sheets[spread].el.querySelector(".front");
+    [izquierda, derecha].forEach((c) => { if (c) c.classList.add("activa"); });
   }
 
-  function abrirLector(cara) {
-    if (lector) return;
-    const indice = caras.indexOf(cara);
-    if (indice < 0) return;
+  /* ---------- Visor: al tocar una imagen, se agranda ---------- */
+  let visor = null;
+
+  function abrirImagen(img) {
+    if (visor) return;
+    const epigrafe = img.closest(".pg")?.querySelector(".caption");
 
     const fondo = document.createElement("div");
-    fondo.className = "lector";
-    const hoja = document.createElement("div");
-    hoja.className = "hoja" + (cara.classList.contains("dark") ? " dark" : "");
-    hoja.style.fontSize = medidaHoja() + "px";
-    hoja.appendChild(cara.querySelector(".clip").cloneNode(true));
-
-    const barra = document.createElement("div");
-    barra.className = "lector-barra";
-    const btn = (txt, etiqueta) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.textContent = txt; b.setAttribute("aria-label", etiqueta);
-      return b;
-    };
-    const anterior = btn("←", "Hoja anterior"), siguiente = btn("→", "Hoja siguiente"), cerrar = btn("Cerrar", "Cerrar la hoja");
-    const cuenta = document.createElement("span");
-    barra.append(anterior, cuenta, siguiente, cerrar);
-
-    fondo.append(hoja, barra);
+    fondo.className = "visor";
+    const grande = document.createElement("img");
+    grande.src = img.src;
+    grande.alt = img.alt;
+    fondo.appendChild(grande);
+    if (epigrafe) {
+      const pie = document.createElement("p");
+      pie.className = "visor-pie";
+      pie.textContent = epigrafe.textContent;
+      fondo.appendChild(pie);
+    }
     document.body.appendChild(fondo);
-    lector = { fondo, hoja, cuenta, anterior, siguiente, indice: -1, origen: cara };
+    visor = { fondo, grande, origen: img };
 
-    // FLIP: arranca del tamaño y lugar que tenía dentro de la carpeta y crece hasta el centro
-    const desde = cara.getBoundingClientRect(), hasta = hoja.getBoundingClientRect();
+    // FLIP: arranca del tamaño y lugar que tenía en la hoja y crece hasta el centro
+    const desde = img.getBoundingClientRect(), hasta = grande.getBoundingClientRect();
     const escala = desde.width / hasta.width;
-    hoja.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${escala})`;
-    hoja.getBoundingClientRect();
-    hoja.style.transition = "transform .45s cubic-bezier(.3,.7,.25,1)";
-    hoja.style.transform = "none";
+    grande.style.transformOrigin = "0 0";
+    grande.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${escala})`;
+    grande.getBoundingClientRect();
+    grande.style.transition = "transform .45s cubic-bezier(.3,.7,.25,1)";
+    grande.style.transform = "none";
     requestAnimationFrame(() => fondo.classList.add("on"));
 
-    mostrarCara(indice);
-    anterior.onclick = () => mostrarCara(lector.indice - 1);
-    siguiente.onclick = () => mostrarCara(lector.indice + 1);
-    cerrar.onclick = cerrarLector;
-    fondo.addEventListener("click", (e) => { if (e.target === fondo) cerrarLector(); });
+    fondo.addEventListener("click", cerrarImagen);
   }
 
-  function mostrarCara(i) {
-    if (!lector || i < 0 || i >= caras.length || i === lector.indice) return;
-    const cara = caras[i];
-    lector.indice = i;
-    lector.origen = cara;
-    lector.hoja.classList.toggle("dark", cara.classList.contains("dark"));
-    lector.hoja.replaceChild(cara.querySelector(".clip").cloneNode(true), lector.hoja.firstChild);
-    lector.hoja.scrollTop = 0;
-    lector.cuenta.textContent = `${i + 1} / ${caras.length}`;
-    lector.anterior.disabled = i === 0;
-    lector.siguiente.disabled = i === caras.length - 1;
-  }
-
-  function cerrarLector() {
-    if (!lector) return;
-    const { fondo, hoja, origen, indice } = lector;
-    lector = null;
-    // al cerrar, la carpeta queda abierta en la doble página de esa hoja
-    goTo(indice % 2 ? Math.floor(indice / 2) + 1 : indice / 2);
-    const desde = origen.getBoundingClientRect(), hasta = hoja.getBoundingClientRect();
-    hoja.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${desde.width / hasta.width})`;
+  function cerrarImagen() {
+    if (!visor) return;
+    const { fondo, grande, origen } = visor;
+    visor = null;
+    const desde = origen.getBoundingClientRect(), hasta = grande.getBoundingClientRect();
+    grande.style.transform = `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px) scale(${desde.width / hasta.width})`;
     fondo.classList.remove("on");
     setTimeout(() => fondo.remove(), 380);
   }
@@ -338,10 +315,8 @@
   cover.addEventListener("animationend", () => binder.classList.remove("nudge"));
 
   addEventListener("keydown", (e) => {
-    if (lector) {
-      if (e.key === "Escape") cerrarLector();
-      else if (e.key === "ArrowRight" || e.key === "PageDown") mostrarCara(lector.indice + 1);
-      else if (e.key === "ArrowLeft" || e.key === "PageUp") mostrarCara(lector.indice - 1);
+    if (visor) {
+      if (e.key === "Escape") cerrarImagen();
       return;
     }
     if (e.key === "ArrowRight" || e.key === "PageDown") next();
@@ -358,8 +333,10 @@
     if (e.target.closest("a, button") || String(getSelection())) return;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) return dx < 0 ? next() : prev();
     if (Math.hypot(dx, dy) < 6 && Date.now() - d.t < 400) {
-      const cara = e.target.closest(".face");
-      if (cara) abrirLector(cara); // tocar la hoja = sacarla de la carpeta y leerla en grande
+      const imagen = e.target.closest(".fig")?.querySelector("img");
+      if (imagen) return abrirImagen(imagen);   // tocar una imagen = verla en grande
+      const hingeX = binder.getBoundingClientRect().left;
+      e.clientX > hingeX ? next() : prev();     // tocar la hoja = pasar de página
     }
   });
 
