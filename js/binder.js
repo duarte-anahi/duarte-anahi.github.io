@@ -87,7 +87,17 @@
   function layout() {
     const u = mobile() ? Math.min(innerWidth / 66, innerHeight / 66) : Math.min(innerWidth / 132, innerHeight / 67);
     binder.style.fontSize = u + "px";
+    escalarTinta(u);
     setCam();
+  }
+  // El filtro de tinta corrida (index.html) mide en píxeles de pantalla; la carpeta cambia de tamaño según la pantalla.
+  // Se escala con la carpeta para que la tinta se corra lo mismo en relación a la letra (ver data-f / data-s).
+  function escalarTinta(u) {
+    const f = document.getElementById("tinta-corrida");
+    if (!f) return;
+    const k = u / 13;
+    f.querySelectorAll("[data-f]").forEach((n) => n.setAttribute("baseFrequency", (n.dataset.f / k).toFixed(4)));
+    f.querySelectorAll("[data-s]").forEach((n) => n.setAttribute("stdDeviation", (n.dataset.s * k).toFixed(2)));
   }
   function setCam() {
     let x = 0;

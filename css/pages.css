@@ -45,6 +45,10 @@
   box-shadow: .04em .09em .3em rgba(0,0,0,.26), 0 0 0 .018em rgba(0,0,0,.07);
 }
 .dark .title { background-color: var(--resalte-dark); box-shadow: .04em .09em .3em rgba(0,0,0,.5); }
+/* Títulos con tinta corrida: el filtro #tinta-corrida de index.html va en el <span>, así la cartulina no se toca.
+   Cada cartulina lleva su propio giro (--giro en el HTML), como papeles pegados a mano de a uno. */
+.title { transform: rotate(var(--giro, -1deg)); font-weight: 700; }
+.title span { display: inline-block; filter: url(#tinta-corrida); }
 .lead { font-size: 1.85em; line-height: 1.28; letter-spacing: -.015em; color: #2a2a28; margin-top: 1.2em !important; max-width: 25em; }
 .body { font-size: 1.58em; line-height: 1.42; letter-spacing: -.005em; color: #2c2c2a; }
 .body + .body { margin-top: .9em; }

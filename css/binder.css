@@ -268,21 +268,29 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 /* ===== HUD ===== */
 .hud {
   position: fixed; left: 50%; bottom: 1.6vh; transform: translateX(-50%); z-index: 50;
-  display: flex; gap: .6rem; align-items: center; font: 500 12px/1 "Inter Tight", sans-serif; letter-spacing: .12em;
+  display: flex; gap: .7rem; align-items: center; font: 500 13.5px/1 "Inter Tight", sans-serif; letter-spacing: .1em;
   color: rgba(255,255,255,.75); text-transform: uppercase; opacity: 0; transition: opacity .6s .6s;
   /* con la carpeta abierta la hoja llega hasta abajo: la barra necesita su propio fondo para leerse */
-  padding: .5rem .7rem; border-radius: 999px;
+  padding: .55rem .75rem; border-radius: 999px;
   background: rgba(10,10,10,.72); backdrop-filter: blur(6px); box-shadow: 0 .2rem 1rem rgba(0,0,0,.5);
 }
 .is-open ~ .hud, .hud.on { opacity: 1; }
 .hud button {
   background: rgba(255,255,255,.06); color: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.12);
-  border-radius: 999px; padding: .55rem .9rem; font: inherit; letter-spacing: inherit; cursor: pointer;
+  border-radius: 999px; padding: .65rem 1.05rem; font: inherit; letter-spacing: inherit; cursor: pointer;
 }
+/* flechas más grandes que el texto: son lo que más se usa */
+.hud #prev, .hud #next { font-size: 1.25em; padding: .5rem 1rem; letter-spacing: 0; }
 .hud button:hover { background: rgba(255,255,255,.12); }
 .hud button:disabled { opacity: .3; cursor: default; }
 /* ancho fijo y números de igual ancho: el contador y las flechas no se mueven al pasar de página */
-.hud .count { width: 3.6rem; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hud .count { width: 4.3rem; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* celular: la barra grande no entra en 375 px con margen */
+@media (max-width: 420px) {
+  .hud { font-size: 13px; gap: .5rem; padding: .5rem .6rem; }
+  .hud button { padding: .65rem .9rem; }
+  .hud .count { width: 4rem; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .binder, .strap, .drop-shadow::before, .drop-shadow::after { transition-duration: .01s !important; }

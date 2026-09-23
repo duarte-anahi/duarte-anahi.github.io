@@ -9,10 +9,41 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=94">
-  <link rel="stylesheet" href="css/pages.css?v=94">
+  <link rel="stylesheet" href="css/binder.css?v=114">
+  <link rel="stylesheet" href="css/pages.css?v=114">
 </head>
 <body>
+<!-- Tinta corrida para los títulos (.title span, ver pages.css), la técnica de "ink bleed" de Photoshop más la carga despareja
+     de una impresión real. Valores pensados para una carpeta con 1em = 13px: binder.js (escalarTinta) los escala
+     con data-f (frecuencia del ruido) y data-s (desenfoque).
+     1) forma: se desenfoca apenas la letra, se le suma ruido y se vuelve a cortar → la letra queda casi nítida.
+        Las "zonas" (ruido grande) solo engordan: en algunos lugares la tinta se corre y en el resto no.
+     2) tinta casi pareja, con una fibra muy leve (sin zonas claras).
+     3) unos pocos puntitos sueltos sin tinta. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="tinta-corrida" x="-3%" y="-10%" width="106%" height="120%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" data-f=".16" baseFrequency=".16" numOctaves="2" seed="5" result="ruido"/>
+    <feTurbulence type="fractalNoise" data-f=".022" baseFrequency=".022" numOctaves="2" seed="21" result="zonas"/>
+    <feTurbulence type="fractalNoise" data-f=".7" baseFrequency=".7" numOctaves="3" seed="13" result="fibra"/>
+    <feTurbulence type="fractalNoise" data-f=".45" baseFrequency=".45" numOctaves="1" seed="9" result="fino"/>
+
+    <feColorMatrix in="ruido" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="ruidoA"/>
+    <feColorMatrix in="zonas" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.65" result="zonasA"/>
+    <feGaussianBlur in="SourceAlpha" data-s=".9" stdDeviation=".9" result="desenfoque"/>
+    <feComposite in="desenfoque" in2="ruidoA" operator="arithmetic" k2="1" k3=".22" k4="-.11" result="s1"/>
+    <feComposite in="s1" in2="zonasA" operator="arithmetic" k2="1" k3=".4" result="s2"/>
+    <feComponentTransfer in="s2" result="forma"><feFuncA type="linear" slope="12" intercept="-5.4"/></feComponentTransfer>
+
+    <feColorMatrix in="fibra" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  .3 0 0 0 .8" result="densidad"/>
+
+    <feColorMatrix in="fino" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -22 0 0 0 17.4" result="sinHuecos"/>
+
+    <feComposite in="forma" in2="sinHuecos" operator="in" result="f1"/>
+    <feComposite in="f1" in2="densidad" operator="in" result="f2"/>
+    <feFlood flood-color="#1d1823"/>
+    <feComposite in2="f2" operator="in"/>
+  </filter>
+</svg>
 <main class="scene">
   <div class="binder is-closed" id="binder">
     <div class="drop-shadow"></div>
@@ -66,7 +97,7 @@
   <section class="page" data-name="Inicio">
     <div class="pg">
       <p class="kicker"><b>[00]</b>Portfolio 2026</p>
-      <h2 class="title">Anahí Duarte</h2>
+      <h2 class="title" style="--giro:-1.2deg"><span>Anahí Duarte</span></h2>
       <p class="lead">Desarrollo proyectos de inteligencia artificial, aplicando aprendizaje automático y redes neuronales, y sumando la integración de modelos de lenguaje.</p>
       <p class="lead" style="margin-top:1.1em !important">Busco comprender cómo aprenden los modelos y convertir ese conocimiento en herramientas útiles, transparentes y evaluables.</p>
       <div class="foot"><span>Buenos Aires</span><span>AR</span></div>
@@ -77,7 +108,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[—]</b>Sobre mí</p>
-      <h2 class="title" style="font-size:4.1em">IA como<br>herramienta de trabajo</h2>
+      <h2 class="title" style="--giro:.9deg; font-size:4.1em"><span>IA como<br>herramienta de trabajo</span></h2>
       <p class="body" style="margin-top:1.8em">Elijo desarrollar herramientas de inteligencia artificial para complementar a las personas, priorizando modelos que puedan ejecutarse de forma local.</p>
       <p class="body">Cuando el sistema se equivoca, no me conformo con mirar la métrica de error. Me interesa investigar a fondo los resultados para explicar exactamente qué pasó y por qué.</p>
       <div class="timeline">
@@ -94,7 +125,7 @@
   <section class="page" data-tab="Sobre mí" data-color="#efede7" data-ink="#111" data-name="Sobre mí">
     <div class="pg">
       <p class="kicker"><b>[—]</b>Herramientas</p>
-      <h2 class="title">Stack</h2>
+      <h2 class="title" style="--giro:-.7deg"><span>Stack</span></h2>
       <div class="skill-group" style="margin-top:2.2em"><h3>Lenguajes</h3><div class="chips"><span>Python</span><span>JavaScript</span></div></div>
       <div class="skill-group"><h3>Deep learning</h3><div class="chips"><span>TensorFlow</span><span>Keras</span><span>NumPy</span><span>Matplotlib</span></div></div>
       <div class="skill-group"><h3>Modelos de lenguaje</h3><div class="chips"><span>Ollama</span><span>llama.cpp</span><span>LangChain</span><span>diseño de prompts</span></div></div>
@@ -108,7 +139,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[01]</b>Modelos de lenguaje</p>
-      <h2 class="title">TutorIA</h2>
+      <h2 class="title" style="--giro:1.3deg"><span>TutorIA</span></h2>
       <p class="lead">Un tutor socrático para trabajos académicos: guía con preguntas y no escribe por el estudiante.</p>
       <dl class="specs">
         <dt>Qué hace</dt><dd>Acompaña la escritura en cuatro etapas —condiciones previas, puesta en texto, revisión y cierre— con una pregunta corta por turno.</dd>
@@ -136,7 +167,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[02]</b>Convolutional Neural Network</p>
-      <h2 class="title">CNN</h2>
+      <h2 class="title" style="--giro:-1deg"><span>CNN</span></h2>
       <p class="lead">Diseño, entrenamiento y diagnóstico de una red neuronal convolucional para clasificar imágenes en 8 clases.</p>
       <dl class="specs">
         <dt>Arquitectura</dt><dd>Cuatro bloques Conv2D + MaxPooling con filtros crecientes (32 → 64 → 128 → 128) y un clasificador denso de 8 salidas: ~2,6M de parámetros.</dd>
@@ -165,7 +196,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[03]</b>Deep learning</p>
-      <h2 class="title">Autoencoder<br>de caracteres</h2>
+      <h2 class="title" style="--giro:.6deg"><span>Autoencoder<br>de caracteres</span></h2>
       <p class="lead">Comprimir letras de 7×5 píxeles en solo dos números, y volver a reconstruirlas.</p>
       <dl class="specs">
         <dt>Datos</dt><dd>32 caracteres codificados en hexadecimal, generados dentro del notebook.</dd>
@@ -193,7 +224,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[04]</b>RAG y verificación</p>
-      <h2 class="title">EL<br>CONTRASTE</h2>
+      <h2 class="title" style="--giro:-1.4deg"><span>EL<br>CONTRASTE</span></h2>
       <p class="lead">Un auditor que evalúa una noticia contra un corpus de estándares periodísticos y muestra cuáles usó.</p>
       <dl class="specs">
         <dt>Qué hace</dt><dd>Recupera los estándares que aplican a la pieza, se los pasa a un modelo de lenguaje y devuelve un dictamen con nivel de credibilidad: alta, media o baja.</dd>
@@ -221,7 +252,7 @@
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[05]</b>Aprendizaje automático</p>
-      <h2 class="title">FIND-S y<br>naïve Bayes</h2>
+      <h2 class="title" style="--giro:1deg"><span>FIND-S y<br>naïve Bayes</span></h2>
       <p class="lead">Dos algoritmos clásicos implementados desde cero con NumPy sobre 45.000 solicitudes de préstamo.</p>
       <dl class="specs">
         <dt>Qué hace</dt><dd>Predice si una solicitud de crédito se otorga o se rechaza a partir de atributos categóricos: sexo, nivel educativo, vivienda, destino de los fondos y préstamos impagos.</dd>
@@ -249,7 +280,7 @@
   <section class="page">
     <div class="pg centrado">
       <p class="kicker"><b>[—]</b>Contacto</p>
-      <h2 class="title xl">Hablemos.</h2>
+      <h2 class="title xl" style="--giro:-.8deg"><span>Hablemos.</span></h2>
       <p class="lead">El código de todos estos proyectos está en GitHub.</p>
       <div class="foot"><span></span><span>14</span></div>
     </div>
@@ -270,8 +301,8 @@
 
 </div>
 
-<script src="js/figures.js?v=94"></script>
-<script src="js/leather.js?v=94"></script>
-<script src="js/binder.js?v=94"></script>
+<script src="js/figures.js?v=114"></script>
+<script src="js/leather.js?v=114"></script>
+<script src="js/binder.js?v=114"></script>
 </body>
 </html>
