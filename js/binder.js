@@ -340,6 +340,56 @@
     }
   });
 
+  /* ---------- Credenciales del bolsillo: se arrastran de costado (y un poco arriba/abajo) sin salirse ----------
+     Con la carpeta abierta la cara interna de la tapa queda derecha, así que 1px de pantalla = 1px de la cara. */
+  const BOLSILLO = { izq: 4.5, der: 60, boca: 22.5, margen: 1 }; // em: bordes de .pocket (boca = borde de arriba)
+  const clamp = (v, a, z) => Math.min(Math.max(v, a), z);
+  // Límites de --x teniendo en cuenta el giro: la credencial gira desde el centro de abajo,
+  // así que la parte de arriba se corre h·sen(giro) hacia un costado.
+  function limitesX(b, u) {
+    const w = b.offsetWidth / u, h = b.offsetHeight / u;
+    const g = parseFloat(getComputedStyle(b).getPropertyValue("--r")) * Math.PI / 180 || 0;
+    const medio = w / 2 * Math.cos(g), corrida = h * Math.sin(g);
+    const izq = -medio + Math.min(0, corrida), der = medio + Math.max(0, corrida); // desde el centro de abajo
+    return [BOLSILLO.izq + BOLSILLO.margen - izq - w / 2, BOLSILLO.der - BOLSILLO.margen - der - w / 2];
+  }
+  // Límites de --y: cada credencial asoma entre un cuarto y la mitad de su alto (sirve para verticales y horizontales)
+  const limitesY = (b, u) => { const h = b.offsetHeight / u; return [BOLSILLO.boca - h / 2, BOLSILLO.boca - h / 4]; };
+  let badgeZ = 0;
+  document.querySelectorAll(".badge").forEach((b) => {
+    // posición inicial: si la del HTML se sale del bolsillo, se acomoda adentro
+    const acomodar = () => {
+      const u = parseFloat(getComputedStyle(binder).fontSize), cs = getComputedStyle(b);
+      const [x0, x1] = limitesX(b, u), [y0, y1] = limitesY(b, u);
+      const x = parseFloat(cs.left) / u, y = parseFloat(cs.bottom) / u;
+      if (x < x0 || x > x1) b.style.setProperty("--x", clamp(x, x0, x1).toFixed(2) + "em");
+      if (y < y0 || y > y1) b.style.setProperty("--y", clamp(y, y0, y1).toFixed(2) + "em");
+    };
+    if (b.complete) acomodar(); else b.addEventListener("load", acomodar, { once: true });
+
+    let drag = null;
+    b.addEventListener("pointerdown", (e) => {
+      if (!isOpen || e.button !== 0) return;
+      e.preventDefault(); e.stopPropagation();
+      const u = parseFloat(getComputedStyle(binder).fontSize), cs = getComputedStyle(b);
+      drag = { x: e.clientX, y: e.clientY, u, left: parseFloat(cs.left) / u, bottom: parseFloat(cs.bottom) / u, lim: limitesX(b, u), limY: limitesY(b, u) };
+      b.style.zIndex = ++badgeZ;            // la que agarrás pasa adelante de las otras
+      b.classList.add("dragging");
+      b.setPointerCapture(e.pointerId);
+    });
+    b.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const x = clamp(drag.left + (e.clientX - drag.x) / drag.u, ...drag.lim);
+      const y = clamp(drag.bottom - (e.clientY - drag.y) / drag.u, ...drag.limY);
+      b.style.setProperty("--x", x.toFixed(2) + "em");
+      b.style.setProperty("--y", y.toFixed(2) + "em");
+    });
+    const soltar = () => { drag = null; b.classList.remove("dragging"); };
+    b.addEventListener("pointerup", soltar);
+    b.addEventListener("pointercancel", soltar);
+    b.addEventListener("click", (e) => e.stopPropagation());
+  });
+
   /* ---------- Arranque ---------- */
   binder.classList.add("no-anim");
   layout(); updateHud();

@@ -121,7 +121,7 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .cover-front .shade { border-radius: 1.1em; background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(0,0,0,.6)); }
 .cover-front:focus { outline: none; }
 
-/* Bolsillo interior con tarjeta personal */
+/* Bolsillo interior */
 .pocket {
   position: absolute; left: 4.5em; right: 4em; bottom: 4.5em; height: 18em; border-radius: .6em 1.2em .6em .6em;
   /* misma escala que la tapa (sin estirar ni ampliar = sin pixelar); solo corrida para que las escamas no calcen con las de atrás */
@@ -129,28 +129,31 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
   box-shadow: 0 -.25em .5em rgba(0,0,0,.55);
   z-index: 2;
 }
-.card {
-  position: absolute; left: 11em; bottom: 14.2em; width: 28em; height: 17em; z-index: 1;
-  padding: 2.2em 2.4em; transform: rotate(-3deg) translateY(0);
-  background: #ecebe6 var(--paper-noise); color: var(--ink);
-  box-shadow: .2em .35em .6em rgba(0,0,0,.6);
-  font-size: 1em;
+/* Credenciales de eventos guardadas en el bolsillo (cada una sale de su script en tools/).
+   --x / --y = posición dentro del bolsillo (binder.js las cambia al arrastrar), --r = giro de cada una.
+   Pistas sin texto, igual que la hebilla: el cursor cambia y cada tanto asoman solas.
+   Al pasar el cursor por una, sale del todo; al agarrarla, queda levantada mientras se arrastra. */
+.badges { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.badge {
+  --y: 14em;
+  position: absolute; left: var(--x); bottom: var(--y); width: 15em;
+  transform: rotate(var(--r, 0deg)); transform-origin: 50% 100%;
+  filter: drop-shadow(.2em .35em .5em rgba(0,0,0,.55));
   transition: transform .45s cubic-bezier(.3,.7,.25,1);
+  touch-action: none; user-select: none; -webkit-user-select: none;
 }
-/* Pistas sin texto, igual que la hebilla: el cursor cambia y cada tanto la tarjeta asoma sola.
-   Al pasar el cursor por el bolsillo o por la tarjeta, sale del todo y se frena el movimiento. */
-.is-open .pocket, .is-open .card { cursor: pointer; }
-.is-open .card { animation: asomar 9s 3s infinite; }
-.is-open .pocket:hover, .is-open .pocket:hover + .card,
-.is-open .card:hover { animation: none; }
-.is-open .pocket:hover + .card, .is-open .card:hover {
-  transform: rotate(-3deg) translateY(-3.4em);
-  box-shadow: .3em .5em .9em rgba(0,0,0,.65);
-}
+/* La asomada va al principio del ciclo: la primera sale apenas termina de abrirse la tapa (1.35s),
+   y cada credencial sale un poco después de la anterior, como una ola. */
+.is-open .badge { pointer-events: auto; cursor: grab; animation: asomar 7s 1.5s infinite; }
+.is-open .badge:nth-child(2) { animation-delay: 1.75s; }
+.is-open .badge:nth-child(3) { animation-delay: 2s; }
+.is-open .badge:nth-child(4) { animation-delay: 2.25s; }
+.is-open .badge:hover, .is-open .badge.dragging { animation: none; transform: rotate(var(--r, 0deg)) translateY(-6em); }
+.is-open .badge.dragging { cursor: grabbing; transition: none; filter: drop-shadow(.4em .7em .8em rgba(0,0,0,.6)); }
 @keyframes asomar {
-  0%, 88%, 100% { transform: rotate(-3deg) translateY(0); }
-  92% { transform: rotate(-3deg) translateY(-1.4em); }
-  96% { transform: rotate(-3deg) translateY(-.35em); }
+  0%, 12%, 100% { transform: rotate(var(--r, 0deg)) translateY(0); }
+  4% { transform: rotate(var(--r, 0deg)) translateY(-1.4em); }
+  8% { transform: rotate(var(--r, 0deg)) translateY(-.35em); }
 }
 
 /* ===== Mecanismo de anillas ===== */

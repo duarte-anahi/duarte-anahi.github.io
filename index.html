@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=78">
-  <link rel="stylesheet" href="css/pages.css?v=78">
+  <link rel="stylesheet" href="css/binder.css?v=94">
+  <link rel="stylesheet" href="css/pages.css?v=94">
 </head>
 <body>
 <main class="scene">
@@ -30,13 +30,12 @@
       </div>
       <div class="face inside leather">
         <div class="pocket leather"></div>
-        <div class="card">
-          <ul class="especialidades">
-            <li>LLMs</li>
-            <li>IA local</li>
-            <li>Machine learning</li>
-            <li>RAG</li>
-          </ul>
+        <!-- Credenciales de eventos: se arrastran dentro del bolsillo. Para sumar otra, copiar la línea
+             y darle su --x (izquierda, en em), --r (giro) y, si es horizontal, --y (altura) y un width mayor. Cada imagen sale de su script en tools/. -->
+        <div class="badges">
+          <img class="badge" style="--x:6.5em; --r:-5deg" src="img/credencial-eci38.webp" alt="Credencial de la ECI 38, Escuela de Ciencias Informáticas de Exactas UBA, con el nombre Anahí" draggable="false">
+          <img class="badge" style="--x:21.5em; --r:4deg" src="img/credencial-nerdearla.webp" alt="Credencial de Nerdearla con el nombre Anahí Duarte" draggable="false">
+          <img class="badge" style="--x:38em; --y:19em; --r:-2deg; width:19em" src="img/credencial-verano-ia.webp" alt="Credencial de la Escuela Internacional de Verano en Inteligencia Artificial, UNAHUR y UNSAM, a nombre de Anahí Duarte, participante" draggable="false">
         </div>
         <div class="shade"></div>
       </div>
@@ -271,8 +270,8 @@
 
 </div>
 
-<script src="js/figures.js?v=78"></script>
-<script src="js/leather.js?v=78"></script>
-<script src="js/binder.js?v=78"></script>
+<script src="js/figures.js?v=94"></script>
+<script src="js/leather.js?v=94"></script>
+<script src="js/binder.js?v=94"></script>
 </body>
 </html>
