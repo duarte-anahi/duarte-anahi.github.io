@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <!-- ?v= obliga al navegador a bajar la versión nueva: subir el número cuando cambien CSS o JS -->
-  <link rel="stylesheet" href="css/binder.css?v=114">
-  <link rel="stylesheet" href="css/pages.css?v=114">
+  <link rel="stylesheet" href="css/binder.css?v=129">
+  <link rel="stylesheet" href="css/pages.css?v=129">
 </head>
 <body>
 <!-- Tinta corrida para los títulos (.title span, ver pages.css), la técnica de "ink bleed" de Photoshop más la carga despareja
@@ -62,10 +62,12 @@
       <div class="face inside leather">
         <div class="pocket leather"></div>
         <!-- Credenciales de eventos: se arrastran dentro del bolsillo. Para sumar otra, copiar la línea
-             y darle su --x (izquierda, en em), --r (giro) y, si es horizontal, --y (altura) y un width mayor. Cada imagen sale de su script en tools/. -->
+             y darle su --x (izquierda, en em), --r (giro) y, si es horizontal, --y (altura) y un width mayor. Las de más abajo en la lista quedan adelante. Cada imagen sale de su script en tools/. -->
         <div class="badges">
-          <img class="badge" style="--x:6.5em; --r:-5deg" src="img/credencial-eci38.webp" alt="Credencial de la ECI 38, Escuela de Ciencias Informáticas de Exactas UBA, con el nombre Anahí" draggable="false">
-          <img class="badge" style="--x:21.5em; --r:4deg" src="img/credencial-nerdearla.webp" alt="Credencial de Nerdearla con el nombre Anahí Duarte" draggable="false">
+          <img class="badge" style="--x:5em; --r:-5deg" src="img/credencial-eci38.webp" alt="Credencial de la ECI 38, Escuela de Ciencias Informáticas de Exactas UBA, con el nombre Anahí" draggable="false">
+          <img class="badge" style="--x:15.5em; --r:3deg" src="img/credencial-ekoparty.webp" alt="Credencial de Ekoparty 20, categoría Community, a nombre de Anahí Duarte" draggable="false">
+          <img class="badge" style="--x:25em; --r:-3deg" src="img/credencial-nerdearla.webp" alt="Credencial de Nerdearla con el nombre Anahí Duarte" draggable="false">
+          <img class="badge" style="--x:34em; --y:17em; --r:2deg" src="img/credencial-hakiaton.webp" alt="Credencial del Hakiatón Buenos Aires 2026 a nombre de Anahí Duarte" draggable="false">
           <img class="badge" style="--x:38em; --y:19em; --r:-2deg; width:19em" src="img/credencial-verano-ia.webp" alt="Credencial de la Escuela Internacional de Verano en Inteligencia Artificial, UNAHUR y UNSAM, a nombre de Anahí Duarte, participante" draggable="false">
         </div>
         <div class="shade"></div>
@@ -135,7 +137,38 @@
     </div>
   </section>
 
-  <!-- Hoja 2 · dorso — Proyecto 01 -->
+  <!-- Hoja 2 · dorso — índice de la sección (la lista la arma binder.js con las solapas que vienen después del separador) -->
+  <section class="page">
+    <div class="pg">
+      <p class="kicker"><b>[—]</b>Índice</p>
+      <h2 class="title" style="--giro:.8deg"><span>Proyectos</span></h2>
+      <ol class="indice"></ol>
+      <div class="foot"><span></span><span>04</span></div>
+    </div>
+  </section>
+
+  <!-- Hoja 3 (frente y dorso): SEPARADOR de acrílico acanalado. class="page plastico": la hoja es transparente y deforma lo de abajo (js/acanalado.js).
+       Frente y dorso sin contenido; la solapa sale del data-tab del frente. -->
+  <section class="page plastico" data-tab="Proyectos" data-color="rgba(228,233,238,.62)" data-ink="#1c1c1c" data-name="Proyectos"></section>
+  <section class="page plastico"></section>
+
+  <!-- Hoja 4 · frente — la hoja entera es una pantalla LED y corren en tres franjas palabras de uso general (no nombres de proyectos),
+       de derecha a izquierda (lo anima js/led.js: cada <li> es una franja, data-color = color de sus LEDs).
+       Es la que se ve a través del separador de plástico. -->
+  <section class="page dark">
+    <div class="pg pantalla-pg">
+      <div class="pantalla-led" role="img" aria-label="IA local, LLMs, RAG, Ollama, LangChain, prompts · Deep learning, neural network, TensorFlow, Keras, NumPy · Machine learning, Python, Git, Jupyter, FastAPI, React">
+        <canvas></canvas>
+        <ul hidden>
+          <li data-color="#ff3b2c">IA LOCAL · LLMS · RAG · OLLAMA · LANGCHAIN · PROMPTS · </li>
+          <li data-color="#39ff6a">DEEP LEARNING · NEURAL NETWORK · TENSORFLOW · KERAS · NUMPY · </li>
+          <li data-color="#3b82ff">MACHINE LEARNING · PYTHON · GIT · JUPYTER · FASTAPI · REACT · </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hoja 4 · dorso — Proyecto 01 -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[01]</b>Modelos de lenguaje</p>
@@ -147,11 +180,11 @@
         <dt>Diseño</dt><dd>Los prompts viven en archivos YAML, separados del código. Corre local con Ollama.</dd>
         <dt>Stack</dt><dd>Python · FastAPI · LangChain · Ollama · React</dd>
       </dl>
-      <div class="foot"><span>Repositorio privado · Programa de Tutorías</span><span>04</span></div>
+      <div class="foot"><span>Repositorio privado · Programa de Tutorías</span><span>06</span></div>
     </div>
   </section>
 
-  <!-- Hoja 3 · frente -->
+  <!-- Hoja 5 · frente -->
   <section class="page" data-tab="TutorIA" data-color="#d9d7d1" data-ink="#111" data-name="TutorIA">
     <div class="pg">
       <div class="fig foto"><img src="img/proyectos/tutoria.png" alt="Interfaz de TutorIA: editor con un borrador a la izquierda y chat con el tutor a la derecha"></div>
@@ -159,11 +192,11 @@
       <p class="caption"><b>Fig. 1</b> — El borrador va en el editor; la consigna y las dudas, en el chat. El tutor lee las dos cosas antes de responder.</p>
       <div class="rule"></div>
       <p class="body">Los límites están escritos en el prompt: no redacta trabajos, no inventa citas y no avanza de etapa sin una respuesta concreta del estudiante.</p>
-      <div class="foot"><span>TutorIA</span><span>05</span></div>
+      <div class="foot"><span>TutorIA</span><span>07</span></div>
     </div>
   </section>
 
-  <!-- Hoja 4 · dorso — Proyecto 03 -->
+  <!-- Hoja 5 · dorso — Proyecto 03 -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[02]</b>Convolutional Neural Network</p>
@@ -175,11 +208,11 @@
         <dt>Experimento</dt><dd>Una segunda versión con 32 filtros fijos en todos los bloques (~619K parámetros, 75% menos) para contrastar capacidad y generalización.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/convolutional-neural-network" target="_blank" rel="noopener">Ver repositorio ↗</a><span>06</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/convolutional-neural-network" target="_blank" rel="noopener">Ver repositorio ↗</a><span>08</span></div>
     </div>
   </section>
 
-  <!-- Hoja 5 · frente -->
+  <!-- Hoja 6 · frente -->
   <section class="page" data-tab="Deep learning" data-color="#efede7" data-ink="#111" data-name="CNN">
     <div class="pg">
       <p class="kicker"><b>[02]</b>Diagnóstico</p>
@@ -188,11 +221,11 @@
       <div class="rule"></div>
       <p class="body">Las dos versiones llegan al 99% en entrenamiento y se estancan cerca del 59% en validación: el modelo memoriza. Recortar el 75% de los parámetros no cambió nada, así que el límite está en los datos.</p>
       <p class="body">Lo aprendido: si la pérdida de validación sube mientras la de entrenamiento baja, hay que dejar de tocar capas y mirar los datos.</p>
-      <div class="foot"><span>CNN</span><span>07</span></div>
+      <div class="foot"><span>CNN</span><span>09</span></div>
     </div>
   </section>
 
-  <!-- Hoja 5 · dorso — Proyecto 04 -->
+  <!-- Hoja 6 · dorso — Proyecto 04 -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[03]</b>Deep learning</p>
@@ -204,11 +237,11 @@
         <dt>Variante</dt><dd>Denoising autoencoder: entrada con ruido, salida limpia.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/autoencoder" target="_blank" rel="noopener">Ver repositorio ↗</a><span>08</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/autoencoder" target="_blank" rel="noopener">Ver repositorio ↗</a><span>10</span></div>
     </div>
   </section>
 
-  <!-- Hoja 6 · frente -->
+  <!-- Hoja 7 · frente -->
   <section class="page" data-name="Autoencoder">
     <div class="pg">
       <p class="kicker"><b>[03]</b>Espacio latente</p>
@@ -216,11 +249,11 @@
       <p class="caption"><b>Fig. 4</b> — Cada carácter ubicado según sus dos valores latentes. Las formas parecidas quedan cerca.</p>
       <div class="rule"></div>
       <p class="body">Con 5% de ruido reconstruye bien; con 30% devuelve otro carácter. Con solo 32 muestras, la red memoriza en lugar de generalizar.</p>
-      <div class="foot"><span>Autoencoder</span><span>09</span></div>
+      <div class="foot"><span>Autoencoder</span><span>11</span></div>
     </div>
   </section>
 
-  <!-- Hoja 6 · dorso — Proyecto 05 -->
+  <!-- Hoja 7 · dorso — Proyecto 05 -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[04]</b>RAG y verificación</p>
@@ -232,11 +265,11 @@
         <dt>Recuperación</dt><dd>Híbrida: los 15 estándares generales entran siempre; los 34 temáticos, solo si superan un umbral de relevancia.</dd>
         <dt>Stack</dt><dd>Python · FastAPI · LangChain · Chroma · HTML, CSS y JS</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>10</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
     </div>
   </section>
 
-  <!-- Hoja 7 · frente -->
+  <!-- Hoja 8 · frente -->
   <section class="page" data-tab="El Contraste" data-color="#dfd6c6" data-ink="#111" data-name="El Contraste">
     <div class="pg">
       <div class="fig foto"><img src="img/proyectos/contraste.png" alt="Interfaz de EL CONTRASTE con forma de diario: cabecera, campo para pegar la noticia y ficha técnica"></div>
@@ -244,11 +277,11 @@
       <p class="caption"><b>Fig. 5</b> — La interfaz tiene forma de diario: se pega la noticia, se elige el modelo y el dictamen sale como nota de tapa.</p>
       <div class="rule"></div>
       <p class="body">Los embeddings corren en la propia máquina y las claves quedan en el backend. Cambiar de proveedor de modelo es una línea de configuración.</p>
-      <div class="foot"><span>El Contraste</span><span>11</span></div>
+      <div class="foot"><span>El Contraste</span><span>13</span></div>
     </div>
   </section>
 
-  <!-- Hoja 7 · dorso — Proyecto 06 -->
+  <!-- Hoja 8 · dorso — Proyecto 06 -->
   <section class="page">
     <div class="pg">
       <p class="kicker"><b>[05]</b>Aprendizaje automático</p>
@@ -260,11 +293,11 @@
         <dt>Naïve Bayes</dt><dd>Suavizado de Laplace y logaritmos para evitar el underflow. Accuracy 0,77 · F1 0,41 · AUC 0,84.</dd>
         <dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd>
       </dl>
-      <div class="foot"><a href="https://github.com/duarte-anahi/algoritmos-find-s-naive-bayes" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
+      <div class="foot"><a href="https://github.com/duarte-anahi/algoritmos-find-s-naive-bayes" target="_blank" rel="noopener">Ver repositorio ↗</a><span>14</span></div>
     </div>
   </section>
 
-  <!-- Hoja 8 · frente -->
+  <!-- Hoja 9 · frente -->
   <section class="page" data-tab="Algoritmos" data-color="#c9d3cd" data-ink="#111" data-name="FIND-S y naïve Bayes">
     <div class="pg">
       <p class="kicker"><b>[05]</b>Resultados</p>
@@ -272,28 +305,28 @@
       <p class="caption"><b>Fig. 6</b> — Curva ROC del conjunto de prueba: AUC 0,84 sobre 145 umbrales distintos.</p>
       <div class="rule"></div>
       <p class="body">La accuracy de 0,77 engaña: 229 de los 285 casos son de una sola clase y el modelo no reconoce más de la mitad de los préstamos otorgados. El AUC muestra que el problema está en el umbral, no en el orden que produce el modelo.</p>
-      <div class="foot"><span>FIND-S y naïve Bayes</span><span>13</span></div>
+      <div class="foot"><span>FIND-S y naïve Bayes</span><span>15</span></div>
     </div>
   </section>
 
-  <!-- Hoja 8 · dorso — el título del cierre -->
+  <!-- Hoja 9 · dorso — el título del cierre -->
   <section class="page">
     <div class="pg centrado">
       <p class="kicker"><b>[—]</b>Contacto</p>
       <h2 class="title xl" style="--giro:-.8deg"><span>Hablemos.</span></h2>
       <p class="lead">El código de todos estos proyectos está en GitHub.</p>
-      <div class="foot"><span></span><span>14</span></div>
+      <div class="foot"><span></span><span>16</span></div>
     </div>
   </section>
 
-  <!-- Hoja 9 · frente — los datos -->
+  <!-- Hoja 10 · frente — los datos -->
   <section class="page" data-tab="Contacto" data-color="#b8c3f2" data-ink="#111" data-name="Contacto">
     <div class="pg centrado">
       <ul class="links" style="margin-top:0">
         <li><a href="mailto:duarteanahi183@gmail.com">duarteanahi183@gmail.com</a><span>Email</span></li>
         <li><a href="https://github.com/duarte-anahi" target="_blank" rel="noopener">github.com/duarte-anahi</a><span>Código</span></li>
       </ul>
-      <div class="foot"><span></span><span>15</span></div>
+      <div class="foot"><span></span><span>17</span></div>
     </div>
   </section>
 
@@ -301,8 +334,10 @@
 
 </div>
 
-<script src="js/figures.js?v=114"></script>
-<script src="js/leather.js?v=114"></script>
-<script src="js/binder.js?v=114"></script>
+<script src="js/figures.js?v=129"></script>
+<script src="js/leather.js?v=129"></script>
+<script src="js/binder.js?v=129"></script>
+<script src="js/led.js?v=129"></script>
+<script src="js/acanalado.js?v=129"></script>
 </body>
 </html>

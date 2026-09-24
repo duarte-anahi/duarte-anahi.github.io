@@ -120,6 +120,22 @@
 .dark .specs dd { color: #e0e2e0; }
 .dark .specs code { background: rgba(255,255,255,.12); }
 
+/* índice de la sección Proyectos (lo llena binder.js): número, nombre, línea de puntos y página */
+.indice { list-style: none; margin: 2.6em 0 0; padding: 0; }
+.indice button {
+  display: flex; align-items: baseline; gap: .8em; width: 100%; padding: .55em 0; border: 0; border-bottom: .06em solid rgba(0,0,0,.18);
+  background: none; font: 500 1.7em/1.2 var(--sans); letter-spacing: -.01em; color: var(--ink-page); text-align: left; cursor: pointer;
+}
+.indice button b { font-weight: 600; font-size: .7em; color: var(--muted); min-width: 1.8em; }
+.indice button span { flex: 1; }
+.indice button i { font-style: normal; font-size: .75em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.indice button:hover span { color: var(--accent); }
+
+/* Hoja-pantalla LED: el canvas ocupa la hoja entera (sin márgenes); lo dibuja js/led.js. */
+.pantalla-pg { padding: 0; }
+.pantalla-led { position: absolute; inset: 0; background: #070708; }
+.pantalla-led canvas { display: block; width: 100%; height: 100%; }
+
 /* etiqueta escrita a mano, pegada torcida */
 .label-card {
   margin-top: 2.4em; align-self: flex-start; width: 88%;

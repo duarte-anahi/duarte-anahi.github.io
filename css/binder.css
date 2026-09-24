@@ -148,6 +148,7 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .is-open .badge:nth-child(2) { animation-delay: 1.75s; }
 .is-open .badge:nth-child(3) { animation-delay: 2s; }
 .is-open .badge:nth-child(4) { animation-delay: 2.25s; }
+.is-open .badge:nth-child(5) { animation-delay: 2.5s; }
 .is-open .badge:hover, .is-open .badge.dragging { animation: none; transform: rotate(var(--r, 0deg)) translateY(-6em); }
 .is-open .badge.dragging { cursor: grabbing; transition: none; filter: drop-shadow(.4em .7em .8em rgba(0,0,0,.6)); }
 @keyframes asomar {
@@ -200,6 +201,30 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 .sheet .face.dark { box-shadow: 0 .06em 0 #2a2c2e, .08em .14em .25em rgba(0,0,0,.6), .5em .8em 1.4em rgba(0,0,0,.35); }
 .sheet .back { transform: rotateY(180deg); }
 .sheet .face.dark { background-color: #0e0f10; background-image: var(--paper-noise), linear-gradient(115deg, #17191b, #0c0d0e); color: #e9e9e6; }
+
+/* Separador de acrílico acanalado (class="page plastico" en el HTML).
+   Frente: js/acanalado.js dibuja en un <canvas> la pantalla LED de abajo deformada por las estrías, y encima va
+   el brillo de cada estría (.acanalado-brillo, 1.4em = ESTRIA_EM del JS). Dorso: arriba del índice, que es HTML
+   y no se puede deformar, queda esmerilado: franjas blancas semitransparentes con el mismo paso de estría. */
+.sheet .face.plastico {
+  background: none;
+  box-shadow: inset 0 0 0 .12em rgba(255,255,255,.4), inset 0 0 .8em rgba(255,255,255,.12), .12em .25em .7em rgba(0,0,0,.3);
+}
+.sheet .face.plastico.back {
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.5) .35em, rgba(255,255,255,.3) .8em,
+                                               rgba(215,220,226,.42) 1.2em, rgba(255,255,255,.2) 1.4em);
+}
+.acanalado { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.acanalado-brillo {
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,.34) 0, rgba(255,255,255,.08) .12em, rgba(255,255,255,.3) .34em,
+                                               rgba(255,255,255,.05) .7em, rgba(0,0,0,.1) 1.15em, rgba(0,0,0,.34) 1.4em),
+              linear-gradient(118deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.12) 45%, rgba(255,255,255,0) 55%);
+}
+.sheet .face.plastico .shade { opacity: calc(var(--lift, 0) * .5); }
+/* en el acrílico los agujeros son transparentes: solo se ve el canto del corte */
+.sheet .face.plastico .holes i { background: rgba(255,255,255,.1); box-shadow: 0 0 0 .1em rgba(255,255,255,.55); }
+.sheet.plastico .tab { background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.15) 0, rgba(255,255,255,.45) .35em, rgba(0,0,0,.08) .7em); box-shadow: .1em .15em .3em rgba(0,0,0,.35); }
 
 /* perforaciones */
 /* justo donde termina cada anilla: la anilla "entra" en el agujero y solo asoma el borde */

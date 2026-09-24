@@ -29,7 +29,8 @@
 
   function makeFace(side, page, sheetIdx) {
     const face = document.createElement("div");
-    face.className = "face " + side + (page && page.classList.contains("dark") ? " dark" : "");
+    face.className = "face " + side + (page && page.classList.contains("dark") ? " dark" : "") +
+      (page && page.classList.contains("plastico") ? " plastico" : "");
     const clip = document.createElement("div"); clip.className = "clip";
     if (page) { while (page.firstChild) clip.appendChild(page.firstChild); }
     const holes = document.createElement("div"); holes.className = "holes";
@@ -39,11 +40,14 @@
     return face;
   }
 
+  // Las solapas se reparten en el alto de la hoja: hasta 7.2em entre una y otra; si hay más, se achican para entrar.
+  const nTabs = pages.filter((p) => p.dataset.tab).length;
+  const TAB_PASO = Math.min(7.2, (PAGE_H - 5 - 7.4) / Math.max(1, nTabs - 1) + 0.2);
+  const TAB_ALTO = Math.min(7.4, TAB_PASO - 0.2);
   function makeTab(label, color, ink, k, target, hidden) {
     const b = document.createElement("button");
     b.className = "tab"; b.type = "button";
-    // 7.2em entre solapas: con 7 solapas y 8.4em la última se salía de la hoja
-    b.style.top = 3 + k * 7.2 + "em"; b.style.setProperty("--tab", color);
+    b.style.top = 3 + k * TAB_PASO + "em"; b.style.height = TAB_ALTO + "em"; b.style.setProperty("--tab", color);
     if (ink) b.style.setProperty("--tab-ink", ink);
     b.innerHTML = "<span></span>"; b.firstChild.textContent = label;
     b.setAttribute("aria-label", "Ir a " + label);
@@ -54,7 +58,7 @@
 
   for (let i = 0; i < nSheets; i++) {
     const fp = pages[i * 2], bp = pages[i * 2 + 1];
-    const el = document.createElement("div"); el.className = "sheet";
+    const el = document.createElement("div"); el.className = "sheet" + (fp.classList.contains("plastico") ? " plastico" : "");
     // pila con grosor: cada hoja de abajo asoma un poco (la luz viene de arriba a la izquierda)
     el.style.top = -28 + i * 0.09 + "em";
     el.style.height = 56 - i * 0.04 + "em";
@@ -71,6 +75,27 @@
   // Caras en orden de lectura (frente de la hoja 1, dorso de la hoja 1, frente de la 2...)
   const caras = sheets.flatMap(({ el }) => [el.querySelector(".front"), el.querySelector(".back")])
     .filter((c) => c && c.querySelector(".pg"));
+
+  // Índice de la sección: los proyectos que vienen después del separador de plástico, con su número ([01]...),
+  // nombre (data-name de la hoja con la figura) y la página donde empieza (pie de la página de la izquierda).
+  const indice = sheetsEl.querySelector(".indice");
+  const sep = sheets.findIndex((s) => s.el.classList.contains("plastico"));
+  if (indice && sep >= 0) {
+    for (let i = sep + 1; i < nSheets; i++) {
+      const nombre = pages[i * 2].dataset.name, izq = sheets[i - 1].el.querySelector(".back");
+      const num = izq && izq.querySelector(".kicker b");
+      if (!nombre || !num || !/\d/.test(num.textContent)) continue; // solo proyectos numerados (no la página ASCII ni Contacto)
+      const pie = izq.querySelector(".foot > span:last-child");
+      const li = document.createElement("li"), b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = "<b></b><span></span><i></i>";
+      b.children[0].textContent = num.textContent.replace(/[\[\]]/g, "");
+      b.children[1].textContent = nombre;
+      b.children[2].textContent = pie ? pie.textContent : "";
+      b.addEventListener("click", (e) => { e.stopPropagation(); goTo(i); });
+      li.appendChild(b); indice.appendChild(li);
+    }
+  }
 
   // Si la última hoja no tiene dorso, no se la da vuelta: la doble página final es la anterior.
   const lastSpread = pages.length % 2 ? nSheets - 1 : nSheets;
@@ -94,7 +119,7 @@
   // Se escala con la carpeta para que la tinta se corra lo mismo en relación a la letra (ver data-f / data-s).
   function escalarTinta(u) {
     const f = document.getElementById("tinta-corrida");
-    if (!f) return;
+    if (!f || !(u > 0)) return; // ventana sin tamaño (pestaña oculta): no hay nada que escalar
     const k = u / 13;
     f.querySelectorAll("[data-f]").forEach((n) => n.setAttribute("baseFrequency", (n.dataset.f / k).toFixed(4)));
     f.querySelectorAll("[data-s]").forEach((n) => n.setAttribute("stdDeviation", (n.dataset.s * k).toFixed(2)));
@@ -130,6 +155,7 @@
     s.ang = a;
     s.el.style.transform = a === 0 ? "none" : `rotateY(${-a}deg)`;
     s.el.style.setProperty("--lift", (Math.sin((a * Math.PI) / 180) * 0.85).toFixed(3));
+    s.el.dataset.ang = a.toFixed(1); // ángulo de la hoja: lo usa js/acanalado.js para mover la distorsión al girar
   }
   function rest(i) {
     const s = sheets[i];
@@ -310,6 +336,7 @@
 
   /* ---------- HUD e interacción ---------- */
   function updateHud() {
+    binder.dataset.spread = spread; // js/led.js y js/acanalado.js lo miran para animar solo cuando su página está a la vista
     hud.classList.toggle("on", isOpen);
     countEl.textContent = `${spread + 1} / ${lastSpread + 1}`;
     btnNext.disabled = spread === lastSpread && !(mobile() && focus === "left");
