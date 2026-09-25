@@ -17,6 +17,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
 
 
 socketserver.TCPServer.allow_reuse_address = True
-with socketserver.ThreadingTCPServer(("", PORT), NoCacheHandler) as httpd:
+# 127.0.0.1: solo responde en esta notebook, no a otros equipos de la misma red wifi.
+with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), NoCacheHandler) as httpd:
     print(f"Sirviendo en http://localhost:{PORT} (sin caché). Ctrl+C para cortar.")
     httpd.serve_forever()
