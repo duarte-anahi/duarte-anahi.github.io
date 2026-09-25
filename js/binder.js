@@ -432,20 +432,12 @@
   layout(); updateHud();
   binder.getBoundingClientRect();
   requestAnimationFrame(() => requestAnimationFrame(() => binder.classList.remove("no-anim")));
-  // Cuero: si existe una foto en img/cuero.(jpg|png|webp) se usa esa; si no, la textura generada por código.
-  const setLeather = (url, photo) => {
-    document.documentElement.style.setProperty("--leather-img", `url("${url}")`);
-    document.body.classList.add("leather-ready");
-    document.body.classList.toggle("leather-photo", !!photo);
-  };
-  const procedural = () => {
-    const u = 26; // resolución de la textura: px por unidad
-    if (window.makeLeather) makeLeather({ width: 64 * u, height: 60 * u, seed: 11 }).then((url) => setLeather(url, false));
-  };
+  // Cuero: img/cuero-tapa.jpg; si falta, se arma en el momento desde la foto img/cuero.(jpg|png|webp).
+  const setLeather = (url) => document.documentElement.style.setProperty("--leather-img", `url("${url}")`);
   function tryPhoto(list) {
-    if (!list.length) return procedural();
+    if (!list.length) return;
     const img = new Image();
-    img.onload = () => { setLeather(fitPhoto(img), true); document.body.classList.toggle("leather-color", LEATHER.tint !== "negro"); };
+    img.onload = () => setLeather(fitPhoto(img));
     img.onerror = () => tryPhoto(list.slice(1));
     img.src = list[0];
   }
@@ -453,7 +445,7 @@
   // procesa en cada carga (eso trababa la apertura). Si cambiás img/cuero.jpg, borrá cuero-tapa.jpg y regenerala.
   const prefit = new Image();
   prefit.onload = () => {
-    const apply = () => { setLeather(prefit.src, true); document.body.classList.toggle("leather-color", LEATHER.tint !== "negro"); };
+    const apply = () => setLeather(prefit.src);
     prefit.decode ? prefit.decode().then(apply, apply) : apply();
   };
   prefit.onerror = () => tryPhoto(["img/cuero.jpg", "img/cuero.jpeg", "img/cuero.png", "img/cuero.webp"]);

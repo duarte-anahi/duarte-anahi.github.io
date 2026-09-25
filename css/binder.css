@@ -4,7 +4,7 @@
   --paper: #f2f0ea;
   --ink: #1d1d1b;
   --leather: #151515;
-  --leather-img: none; /* lo completa leather.js */
+  --leather-img: none; /* lo completa binder.js */
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
