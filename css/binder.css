@@ -204,22 +204,47 @@ body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -we
 
 /* Separador de acrílico acanalado (class="page plastico" en el HTML).
    Frente: js/acanalado.js dibuja en un <canvas> la pantalla LED de abajo deformada por las estrías, y encima va
-   el brillo de cada estría (.acanalado-brillo, 1.4em = ESTRIA_EM del JS). Dorso: arriba del índice, que es HTML
-   y no se puede deformar, queda esmerilado: franjas blancas semitransparentes con el mismo paso de estría. */
+   el brillo de cada estría (.acanalado-brillo, 1.929em = ESTRIA_EM del JS) y la foto del acrílico (.acanalado-foto).
+   Dorso: arriba del índice, tajadas del índice estiradas (.acanalado-dorso) y la foto img/acrilico-dorso.webp. */
 .sheet .face.plastico {
   background: none;
   box-shadow: inset 0 0 0 .12em rgba(255,255,255,.4), inset 0 0 .8em rgba(255,255,255,.12), .12em .25em .7em rgba(0,0,0,.3);
 }
-.sheet .face.plastico.back {
-  background: repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.5) .35em, rgba(255,255,255,.3) .8em,
-                                               rgba(215,220,226,.42) 1.2em, rgba(255,255,255,.2) 1.4em);
+/* índice deformado (lo arma js/acanalado.js, sobre la hoja del índice): tajadas verticales con una copia cada una, sobre papel.
+   Encima, con ::after, otra foto de Gemini del mismo acrílico, enderezada y reducida al relieve (canaletas, filos,
+   rayones, huellas) sobre transparente (lo arma tools/acrilico-dorso.py). */
+.acanalado-dorso {
+  position: absolute; inset: 0; overflow: hidden; will-change: opacity; pointer-events: none;
+  background-color: var(--paper);
+  background-image: var(--paper-noise), linear-gradient(115deg, #fbfaf6 0%, #f0eee7 55%, #e6e3db 100%);
+}
+.acanalado-dorso .tajada { position: absolute; top: 0; bottom: 0; overflow: hidden; }
+.acanalado-dorso .tajada > .clip { position: absolute; top: 0; bottom: 0; transform-origin: 0 0; }
+.acanalado-dorso .title span { filter: none; } /* la tinta corrida es un filtro SVG: repetido en cada tajada trabaría el giro */
+.sheet .face.plastico.back::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: url("../img/acrilico-dorso.webp") center / 100% 100% no-repeat;
 }
 .acanalado { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .acanalado-brillo {
+  /* relieve de cada estría, con el mismo paso que las de la foto (1.929em, primera canaleta a .33em):
+     1) el reflejo filoso (se corre con --luz, que pone js/acanalado.js según el giro de la hoja y el mouse),
+     2) canaleta oscura, panza apenas clara y lado de la sombra (luz desde la izquierda, como el resto de la carpeta). */
+  --luz: 0;
   position: absolute; inset: 0; pointer-events: none;
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,.34) 0, rgba(255,255,255,.08) .12em, rgba(255,255,255,.3) .34em,
-                                               rgba(255,255,255,.05) .7em, rgba(0,0,0,.1) 1.15em, rgba(0,0,0,.34) 1.4em),
-              linear-gradient(118deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.12) 45%, rgba(255,255,255,0) 55%);
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0) .38em, rgba(255,255,255,.34) .5em,
+                                     rgba(255,255,255,.06) .62em, rgba(255,255,255,0) .8em, rgba(255,255,255,0) 1.929em),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.6) 0, rgba(0,0,0,.1) .12em, rgba(255,255,255,.08) .7em,
+                                     rgba(0,0,0,.04) 1.2em, rgba(0,0,0,.28) 1.7em, rgba(0,0,0,.6) 1.929em);
+  background-position: calc(.33em + var(--luz) * .3em) 0, .33em 0;
+}
+/* la foto (img/acrilico.jpg) es el acrílico sobre fondo negro: con "screen" el negro no hace nada y solo suma lo que
+   el plástico refleja (canaletas, rayones, huellas, el canto con esquinas redondeadas) */
+.acanalado-foto {
+  position: absolute; inset: 0; pointer-events: none;
+  background: url("../img/acrilico.jpg") center / 100% 100% no-repeat;
+  mix-blend-mode: screen; opacity: .85;
 }
 .sheet .face.plastico .shade { opacity: calc(var(--lift, 0) * .5); }
 /* en el acrílico los agujeros son transparentes: solo se ve el canto del corte */
