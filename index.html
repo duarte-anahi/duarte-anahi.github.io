@@ -173,11 +173,9 @@
     <div class="pg">
       <p class="kicker"><b>[01]</b>Modelos de lenguaje</p>
       <h2 class="title" style="--giro:1.3deg"><span>TutorIA</span></h2>
-      <p class="lead">Un tutor socrático para trabajos académicos: guía con preguntas y no escribe por el estudiante.</p>
+      <p class="lead">Un tutor socrático para trabajos académicos que guía con preguntas y no escribe por el estudiante.</p>
+      <p class="body" style="margin-top:1.3em">Está construido sobre un LLM que corre en forma local con Ollama, sin depender de APIs externas. El trabajo central es de prompt engineering, porque las instrucciones definen el rol socrático del tutor y sus límites. LangChain organiza la conversación en etapas y el modelo decide cuándo avanzar leyendo el contexto completo del borrador y el chat.</p>
       <dl class="specs">
-        <dt>Qué hace</dt><dd>Acompaña la escritura en cuatro etapas —condiciones previas, puesta en texto, revisión y cierre— con una pregunta corta por turno.</dd>
-        <dt>Cómo</dt><dd>El modelo lee el chat y el borrador. Cuando se cumple el objetivo de la etapa, marca <code>[AVANZAR]</code> y la interfaz avanza la barra de progreso.</dd>
-        <dt>Diseño</dt><dd>Los prompts viven en archivos YAML, separados del código. Corre local con Ollama.</dd>
         <dt>Stack</dt><dd>Python · FastAPI · LangChain · Ollama · React</dd>
       </dl>
       <div class="foot"><span>Repositorio privado · Programa de Tutorías</span><span>06</span></div>
@@ -202,10 +200,8 @@
       <p class="kicker"><b>[02]</b>Convolutional Neural Network</p>
       <h2 class="title" style="--giro:-1deg"><span>CNN</span></h2>
       <p class="lead">Diseño, entrenamiento y diagnóstico de una red neuronal convolucional para clasificar imágenes en 8 clases.</p>
+      <p class="body" style="margin-top:1.3em">Es el tipo de arquitectura sobre el que se apoya la visión por computadora. Las capas de convolución extraen características visuales, de bordes simples a formas complejas, y las de pooling reducen la imagen conservando lo relevante. Es aprendizaje supervisado, porque la red aprende de imágenes ya etiquetadas. El proyecto también trabaja la relación entre capacidad del modelo, sobreajuste y generalización.</p>
       <dl class="specs">
-        <dt>Arquitectura</dt><dd>Cuatro bloques Conv2D + MaxPooling con filtros crecientes (32 → 64 → 128 → 128) y un clasificador denso de 8 salidas: ~2,6M de parámetros.</dd>
-        <dt>Entrenamiento</dt><dd>1.567 imágenes a 200×200, división 80/20, optimizador Adam y 15 épocas.</dd>
-        <dt>Experimento</dt><dd>Una segunda versión con 32 filtros fijos en todos los bloques (~619K parámetros, 75% menos) para contrastar capacidad y generalización.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
       <div class="foot"><a href="https://github.com/duarte-anahi/convolutional-neural-network" target="_blank" rel="noopener">Ver repositorio ↗</a><span>08</span></div>
@@ -231,10 +227,8 @@
       <p class="kicker"><b>[03]</b>Deep learning</p>
       <h2 class="title" style="--giro:.6deg"><span>Autoencoder<br>de caracteres</span></h2>
       <p class="lead">Comprimir letras de 7×5 píxeles en solo dos números, y volver a reconstruirlas.</p>
+      <p class="body" style="margin-top:1.3em">Un autoencoder es una red que aprende a comprimir datos y reconstruirlos sin necesidad de etiquetas, un caso de aprendizaje no supervisado. El encoder lleva cada carácter a un espacio latente de dos dimensiones y el decoder lo reconstruye desde ahí. Es la misma idea de reducción de dimensionalidad que hay detrás de los embeddings. La variante denoising aprende a limpiar entradas con ruido.</p>
       <dl class="specs">
-        <dt>Datos</dt><dd>32 caracteres codificados en hexadecimal, generados dentro del notebook.</dd>
-        <dt>Modelo</dt><dd>Encoder denso hacia un espacio latente de 2 dimensiones y decoder que reconstruye los 35 píxeles.</dd>
-        <dt>Variante</dt><dd>Denoising autoencoder: entrada con ruido, salida limpia.</dd>
         <dt>Stack</dt><dd>Python · TensorFlow · Keras</dd>
       </dl>
       <div class="foot"><a href="https://github.com/duarte-anahi/autoencoder" target="_blank" rel="noopener">Ver repositorio ↗</a><span>10</span></div>
@@ -259,10 +253,8 @@
       <p class="kicker"><b>[04]</b>RAG y verificación</p>
       <h2 class="title" style="--giro:-1.4deg"><span>EL<br>CONTRASTE</span></h2>
       <p class="lead">Un auditor que evalúa una noticia contra un corpus de estándares periodísticos y muestra cuáles usó.</p>
+      <p class="body" style="margin-top:1.3em">Aplica RAG, la técnica que conecta un LLM con una base de conocimiento propia para que responda apoyado en documentos y no solo en lo que aprendió, lo que reduce las alucinaciones. Los 49 estándares periodísticos del corpus se guardan como embeddings en Chroma, una base de datos vectorial que permite búsqueda semántica. LangChain arma el flujo entre la recuperación y el modelo.</p>
       <dl class="specs">
-        <dt>Qué hace</dt><dd>Recupera los estándares que aplican a la pieza, se los pasa a un modelo de lenguaje y devuelve un dictamen con nivel de credibilidad: alta, media o baja.</dd>
-        <dt>Corpus</dt><dd>49 estándares tomados de documentos públicos: IFCN, la tipología de Wardle, ACNUR y la Defensoría del Público.</dd>
-        <dt>Recuperación</dt><dd>Híbrida: los 15 estándares generales entran siempre; los 34 temáticos, solo si superan un umbral de relevancia.</dd>
         <dt>Stack</dt><dd>Python · FastAPI · LangChain · Chroma · HTML, CSS y JS</dd>
       </dl>
       <div class="foot"><a href="https://github.com/duarte-anahi/verificador-de-noticias-rag" target="_blank" rel="noopener">Ver repositorio ↗</a><span>12</span></div>
@@ -286,11 +278,9 @@
     <div class="pg">
       <p class="kicker"><b>[05]</b>Aprendizaje automático</p>
       <h2 class="title" style="--giro:1deg"><span>FIND-S y<br>naïve Bayes</span></h2>
-      <p class="lead">Dos algoritmos clásicos implementados desde cero con NumPy sobre 45.000 solicitudes de préstamo.</p>
+      <p class="lead">Dos algoritmos clásicos del machine learning para clasificar 45.000 solicitudes de crédito.</p>
+      <p class="body" style="margin-top:1.3em">Los programé a mano con NumPy, sin librerías como scikit-learn que ya los traen hechos. FIND-S viene del aprendizaje de conceptos y busca la hipótesis más específica que cubre los ejemplos positivos. Naïve Bayes es un clasificador probabilístico basado en el teorema de Bayes, que asume independencia entre atributos y usa suavizado de Laplace. Se evaluó con F1 y curva ROC, métricas pensadas para clases desbalanceadas.</p>
       <dl class="specs">
-        <dt>Qué hace</dt><dd>Predice si una solicitud de crédito se otorga o se rechaza a partir de atributos categóricos: sexo, nivel educativo, vivienda, destino de los fondos y préstamos impagos.</dd>
-        <dt>FIND-S</dt><dd>Devuelve <code>h = (?, ?, ?, no)</code> y deja 17 falsos positivos sobre sus propios datos de entrenamiento.</dd>
-        <dt>Naïve Bayes</dt><dd>Suavizado de Laplace y logaritmos para evitar el underflow. Accuracy 0,77 · F1 0,41 · AUC 0,84.</dd>
         <dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd>
       </dl>
       <div class="foot"><a href="https://github.com/duarte-anahi/algoritmos-find-s-naive-bayes" target="_blank" rel="noopener">Ver repositorio ↗</a><span>14</span></div>
